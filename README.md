@@ -414,6 +414,8 @@ Contributions are welcome through:
 * Part 2 Demo Link:
 * POE Demo Link:
 
+---
+
 # 📄 License
 
 This project is licensed under the **MIT License**.
@@ -432,8 +434,8 @@ This project is licensed under the **MIT License**.
 
 🏫 Institution:
 
-**The Independent Institute of Education (IIE)**
-Rosebank International Braamfontein
+**The Independent Institute of Education (IIE) Rosebank International Braamfontein**
+
 ---
 
 # 🙏 Acknowledgements
