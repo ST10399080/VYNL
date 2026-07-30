@@ -188,7 +188,7 @@ Possible challenge types include:
 
 # 🏗️ Technology Stack
 
-## Mobile Development
+## 📲 Mobile Development
 
 * Kotlin
 * Android Studio
@@ -197,7 +197,7 @@ Possible challenge types include:
 
 ---
 
-## Backend
+## 📱 Backend
 
 * REST API
 * JSON
@@ -205,34 +205,34 @@ Possible challenge types include:
 
 ---
 
-## Database
+## 🗄️ Database
 
 * MySQL *(Server Database)*
 * SQLite / Room *(Offline Storage)*
 
 ---
 
-## Authentication
+## 🫆 Authentication
 
 * Secure Password Hashing
 * Google Sign-In (Final PoE)
 
 ---
 
-## Version Control
+## 🆚 Version Control
 
 * Git
 * GitHub
 
 ---
 
-## CI/CD
+## ✅ CI/CD
 
 * GitHub Actions
 
 ---
 
-## Development Tools
+## 🔨 Development Tools
 
 * Android Studio
 * IntelliJ IDEA
@@ -347,7 +347,7 @@ Allow Gradle to download all dependencies.
 
 ---
 
-## Run
+## ▶️ Run
 
 Run the application on:
 
@@ -409,6 +409,11 @@ Contributions are welcome through:
 
 ---
 
+# ▶️ Youtube Demo
+
+* Part 2 Demo Link:
+* POE Demo Link:
+
 # 📄 License
 
 This project is licensed under the **MIT License**.
@@ -417,13 +422,15 @@ This project is licensed under the **MIT License**.
 
 # 👨‍💻 Author
 
-**Developer:** *Fezile Jam-Jam (ST10399080), Tumelo Teka (ST)*
+**Developer:** 
+* Fezile Jam-Jam (ST10399080)
+* Tumelo Teka (ST10126814)
 
-Module:
+📕 Module:
 
 **OPSC6312 – Open Source Coding (Intermediate)**
 
-Institution:
+🏫 Institution:
 
 **The Independent Institute of Education (IIE)**
 Rosebank International Braamfontein
