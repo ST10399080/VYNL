@@ -1,4 +1,6 @@
-# 🎵 [Undefined]
+# 🎵 VYNL
+
+
 
 > **Music Discovery, Tracking, Review, and Recommendation Application**
 
@@ -13,9 +15,9 @@
 
 # 📖 Overview
 
-**[Undefined]** is an Android application designed to help music enthusiasts discover, organise, review, and share their favourite music. Inspired by platforms such as **Last.fm**, **Musicboard**, and **Spotify**, the application combines music discovery, album tracking, user reviews, personalised recommendations, and social interaction into a single modern platform.
+VYNL is an Android application designed to help music enthusiasts discover, organise, review, and share their favourite music. Inspired by platforms such as **Last.fm**, **Musicboard**, and **Spotify**, the application combines music discovery, album tracking, user reviews, personalised recommendations, and social interaction into a single modern platform.
 
-Unlike traditional music streaming services, **[Undefined]** focuses on helping users build a personal music library, discover new albums, review what they listen to, and connect with people who share similar musical tastes.
+Unlike traditional music streaming services, VYNL focuses on helping users build a personal music library, discover new albums, review what they listen to, and connect with people who share similar musical tastes.
 
 This application is being developed as part of the **OPSC6312 Open Source Coding (Intermediate) Portfolio of Evidence (PoE)**.
 
@@ -86,7 +88,6 @@ The primary objectives of this project are to:
 * User Profiles
 * Public Reviews
 * Taste Compatibility
-* Shared Listening Rooms *(Planned)*
 
 ---
 
@@ -143,35 +144,9 @@ The compatibility score is generated using:
 
 ---
 
-## 🎧 User Feature 5 — Live Listening Rooms / Jam Sessions (Final PoE)
-
-Create collaborative listening rooms where users can:
-
-* Join Rooms
-* View Participants
-* Chat
-* Share Albums
-* Vote on Music
-
----
-
 # 🌟 Planned Add-On Features
 
 These features are outside the assessment requirements but are planned as future enhancements.
-
-## 🤖 Soundtrack My Day
-
-An AI-powered recommendation assistant that suggests music based on the user's current mood, activity, or free-text prompt.
-
-Examples:
-
-* Studying
-* Gym
-* Relaxing
-* Travelling
-* Working
-
----
 
 ## 🎮 Daily Music Challenge
 
@@ -278,7 +253,6 @@ Room Database
 * Settings
 * Listening Lists
 * Compatibility
-* Jam Sessions
 
 ---
 
@@ -391,7 +365,6 @@ The project uses:
 * Push Notifications
 * Multi-language Support
 * Taste Compatibility Index
-* Live Listening Rooms
 * Google Play Preparation
 * Release Notes
 
@@ -427,6 +400,7 @@ This project is licensed under the **MIT License**.
 **Developer:** 
 * Fezile Jam-Jam (ST10399080)
 * Tumelo Teka (ST10126814)
+* Ivant Wambo (ST10448302)
 
 📕 Module:
 
