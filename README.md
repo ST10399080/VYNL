@@ -1,8 +1,10 @@
-# 🎵 VYNL
+# <h1 align="center">VYNL</h1>
 
+<p align="center">
+  <img width="1184" height="628" alt="Screenshot 2026-08-11 171544" src="https://github.com/user-attachments/assets/b1b90b3c-c741-4dc7-965c-555152f907a5" />
+</p>
 
-
-> **Music Discovery, Tracking, Review, and Recommendation Application**
+<p align="center"><i>**Music Discovery, Tracking, Review, and Recommendation Application**</i></p>
 
 ![Platform](https://img.shields.io/badge/Platform-Android-green)
 ![Language](https://img.shields.io/badge/Language-Kotlin-purple)
@@ -10,7 +12,7 @@
 ![Database](https://img.shields.io/badge/Database-MySQL%20%7C%20SQLite-orange)
 ![Status](https://img.shields.io/badge/Status-In%20Development-yellow)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
-
+</i>
 ---
 
 # 📖 Overview
