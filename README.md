@@ -192,7 +192,7 @@ Possible challenge types include:
 ## 🫆 Authentication
 
 * Secure Password Hashing
-* Google Sign-In (Final PoE)
+* Google Sign-In 
 
 ---
 
@@ -404,7 +404,7 @@ See [LICENSE](LICENSE) for full details.
 **Developer:** 
 * Fezile Jam-Jam (ST10399080)
 * Tumelo Teka (ST10126814)
-* Ivant Wambo (ST10448302)
+* Ivant Wambo 
 
 📕 Module:
 
