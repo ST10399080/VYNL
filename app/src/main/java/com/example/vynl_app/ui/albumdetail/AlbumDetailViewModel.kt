@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 // zero changes here.
 class AlbumDetailViewModel(
     private val albumId: String,
-    private val currentUserId: String,
+    val currentUserId: String,
     private val ratingRepository: RatingRepository,
     private val albumRepository: AlbumRepository,
     private val reviewRepository: ReviewRepository
@@ -71,6 +71,14 @@ class AlbumDetailViewModel(
         viewModelScope.launch {
             ratingRepository.submitRating(albumId, currentUserId, stars)
             loadCommunityScore() // refresh the average to reflect the new rating
+        }
+    }
+
+    // Called when the user posts from the Review Composer sheet.
+    fun onReviewSubmitted(stars: Int, text: String) {
+        viewModelScope.launch {
+            reviewRepository.submitReview(albumId, currentUserId, stars, text)
+            loadReviews() // refresh the list to show the new review
         }
     }
 }
