@@ -88,4 +88,18 @@ None yet. Per the design doc: Firebase Authentication for auth, Firestore for us
 `material-icons-extended` isn't a dependency yet (see Icons above), so some screens stand in a base-set filled icon for one the mock actually uses. Fix these when that dependency is eventually added:
 
 - Artist Detail: `Person` stands in for `PersonAdd` (Follow affordance), `Face` stands in for `Videocam` (Stories affordance). Both will confuse users until swapped.
-- Artist Detail: `CheckCircle` stands in for `Verified` (the verified-artist badge).
+- Artist Detail: `CheckCircle` stands in for `Verified` (the verified-artist badge).
+
+## Known deferred fixes
+
+- Add to List (`ui/list/AddToListViewModel.kt`) re-fetches the whole list after every checkbox toggle instead of updating optimistically. Deviates from the design doc's own stated convention (section 2: "All settings changes are optimistic in the UI, applying immediately... synced to the API in the background"). Revisit when we standardize the mutation-response pattern across repositories.
+- Fake self-submitted reviews (`data/review/FakeReviewRepository.kt`) display `authorName = "You"`, `handle = "@{userId}"`. Replace with the real user's profile display name once auth lands.
+- `AlbumDetailViewModel.currentUserId` is public (was private) so `AlbumDetailScreen` can construct `AddToListViewModel` with the same user id. When real auth lands, replace this with a shared `UserSession` source of truth and re-privatize the field.
+
+## Deliberately deferred features
+
+Not unfinished work — confirmed out of scope for now because the design doc doesn't require them, even though the Figma mock shows them:
+
+- Review Composer's "Sonic Tags" picker (Figma frame `1:669`). Section 8 ("Ratings and reviews") only specifies "a quick 1-to-5-star rating and an optional written review per album" — no tagging. No tag data domain exists anywhere else in the app either (genre/tag browsing per section 7.3 is a separate, also-unbuilt feature). Treat as a nice-to-have the Figma designer added, not an MVP requirement.
+- Home Feed's bottom nav bar (Home/Discover/Activity/Profile). Home Feed is standalone for now — three of the four destinations don't exist yet (only Home itself does). Building the nav bar is its own scope once Discover, Activity, and Profile exist; don't add it piecemeal pointing at missing screens.
+- Home Feed's other three tabs (Popular/Trending/Favorites) — only "Top" is built. No algorithmic backend exists to make the other three mean anything different from each other yet.
