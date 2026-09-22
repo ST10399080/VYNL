@@ -34,12 +34,18 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -75,7 +81,15 @@ private fun formatCompactCount(count: Long): String = when {
 }
 
 @Composable
-fun ArtistDetailTopBar(onBack: () -> Unit, onShare: () -> Unit, onMoreOptions: () -> Unit) {
+fun ArtistDetailTopBar(
+    onBack: () -> Unit,
+    onShare: () -> Unit,
+    onMoreOptions: () -> Unit,
+    onRankAlbumsClick: () -> Unit = {},
+    onRankSongsClick: () -> Unit = {}
+) {
+    var showMenu by remember { mutableStateOf(false) }
+
     Column(
         Modifier
             .fillMaxWidth()
@@ -106,8 +120,32 @@ fun ArtistDetailTopBar(onBack: () -> Unit, onShare: () -> Unit, onMoreOptions: (
                 IconButton(onClick = onShare, modifier = Modifier.alpha(0.8f)) {
                     Icon(Icons.Filled.Share, contentDescription = "Share artist", tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
                 }
-                IconButton(onClick = onMoreOptions, modifier = Modifier.alpha(0.8f)) {
-                    Icon(Icons.Filled.MoreVert, contentDescription = "More options", tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
+                Box {
+                    IconButton(
+                        onClick = {
+                            showMenu = true
+                            onMoreOptions()
+                        },
+                        modifier = Modifier.alpha(0.8f)
+                    ) {
+                        Icon(Icons.Filled.MoreVert, contentDescription = "More options", tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
+                    }
+                    DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
+                        DropdownMenuItem(
+                            text = { Text("Rank Albums") },
+                            onClick = {
+                                showMenu = false
+                                onRankAlbumsClick()
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Rank Songs") },
+                            onClick = {
+                                showMenu = false
+                                onRankSongsClick()
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -267,7 +305,7 @@ fun EssentialReleasesSection(
             Text("View All (${releases.size})", color = VynlColors.TextSecondary, style = ArtistText.Caption)
         }
         LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            items(releases) { release -> ReleaseCard(release, onClick = { onReleaseClick(release.id) }) }
+            items(releases) { release -> ReleaseCard(release, onClick = { onReleaseClick(release.albumId) }) }
         }
     }
 }
@@ -311,7 +349,12 @@ private fun ReleaseCard(release: ArtistRelease, onClick: () -> Unit) {
 }
 
 @Composable
-fun PopularTracksSection(tracks: List<ArtistTrack>, onTrackPlayClick: (ArtistTrack) -> Unit, modifier: Modifier = Modifier) {
+fun PopularTracksSection(
+    tracks: List<ArtistTrack>,
+    onTrackPlayClick: (ArtistTrack) -> Unit,
+    onTrackAlbumClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text("Popular Tracks", color = VynlColors.TextPrimary, style = ArtistText.HeadingSmall)
@@ -320,17 +363,24 @@ fun PopularTracksSection(tracks: List<ArtistTrack>, onTrackPlayClick: (ArtistTra
         Column(Modifier.fillMaxWidth().background(VynlColors.Surface, CardShape).clip(CardShape)) {
             tracks.forEachIndexed { index, track ->
                 if (index > 0) HorizontalDivider(color = VynlColors.BorderMuted)
-                PopularTrackRow(track, onPlayClick = { onTrackPlayClick(track) })
+                PopularTrackRow(
+                    track,
+                    onPlayClick = { onTrackPlayClick(track) },
+                    // Only navigates for a track that belongs to an album; a standalone
+                    // single (albumId == null) has nowhere to go, so the row tap is a no-op.
+                    onRowClick = track.albumId?.let { albumId -> { onTrackAlbumClick(albumId) } } ?: {}
+                )
             }
         }
     }
 }
 
 @Composable
-private fun PopularTrackRow(track: ArtistTrack, onPlayClick: () -> Unit) {
+private fun PopularTrackRow(track: ArtistTrack, onPlayClick: () -> Unit, onRowClick: () -> Unit) {
     Row(
         Modifier
             .fillMaxWidth()
+            .clickable(onClick = onRowClick)
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween

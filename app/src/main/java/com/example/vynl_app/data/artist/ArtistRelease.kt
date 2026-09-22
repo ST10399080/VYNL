@@ -11,5 +11,7 @@ data class ArtistRelease(
     val year: Int,
     val trackCount: Int,
     val ratingPercentage: Int,
-    val ratingCount: Long
+    val ratingCount: Long,
+    // The Album Detail screen's id for this release, so tapping the card can navigate there.
+    val albumId: String
 )

@@ -21,20 +21,43 @@ import com.example.vynl_app.ui.theme.VynlColors
 fun ArtistDetailScreen(
     viewModel: ArtistDetailViewModel,
     onBack: () -> Unit = {},
+    // TODO: share artist profile. The design doc only specifies shareable links for
+    // custom lists (section 9, "Shareable list links"); no equivalent is described for
+    // artist profiles. Would need its own deep-link scheme before this can do anything.
     onShare: () -> Unit = {},
+    // TODO: overflow menu. Contents aren't specified anywhere — the Figma frame (1:964)
+    // never expands this menu, and the design doc doesn't mention one for Artist Detail.
     onMoreOptions: () -> Unit = {},
+    // TODO: follow system (design doc section 9, "Follow system"). Following an artist
+    // isn't explicitly covered — that section is about following other users — but the
+    // same underlying /follows resource (REST API Endpoints table) is the likely fit.
+    // Drives the activity feed and "followed artist releases a new album" notifications
+    // (section 5) once wired up.
     onFollowClick: () -> Unit = {},
+    // TODO: play radio. No backend endpoint exists for this anywhere in the design doc's
+    // REST API Endpoints table, and no playback engine exists in the app yet either.
     onPlayRadioClick: () -> Unit = {},
+    // TODO: opens the "Immersive Artist Story View" screen (Figure 7 nav diagram) — not
+    // built yet.
     onStoriesClick: () -> Unit = {},
     onReadFullBioClick: () -> Unit = {},
-    onReleaseClick: (String) -> Unit = {}
+    onReleaseClick: (String) -> Unit = {},
+    onTrackAlbumClick: (String) -> Unit = {},
+    onRankAlbumsClick: () -> Unit = {},
+    onRankSongsClick: () -> Unit = {}
 ) {
     val artist by viewModel.artist.collectAsState()
     val essentialReleases by viewModel.essentialReleases.collectAsState()
     val popularTracks by viewModel.popularTracks.collectAsState()
 
     Column(Modifier.fillMaxSize()) {
-        ArtistDetailTopBar(onBack = onBack, onShare = onShare, onMoreOptions = onMoreOptions)
+        ArtistDetailTopBar(
+            onBack = onBack,
+            onShare = onShare,
+            onMoreOptions = onMoreOptions,
+            onRankAlbumsClick = onRankAlbumsClick,
+            onRankSongsClick = onRankSongsClick
+        )
 
         val detail = artist
         if (detail == null) {
@@ -70,6 +93,7 @@ fun ArtistDetailScreen(
                 PopularTracksSection(
                     tracks = popularTracks,
                     onTrackPlayClick = { /* playback isn't built yet */ },
+                    onTrackAlbumClick = onTrackAlbumClick,
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
                 PatchArchitectureNote(modifier = Modifier.padding(horizontal = 20.dp))

@@ -25,18 +25,19 @@ class FakeArtistRepository : ArtistRepository {
     override suspend fun getEssentialReleases(artistId: String): List<ArtistRelease> {
         delay(300)
         return listOf(
-            ArtistRelease("1", "Bloom Atlas", ReleaseFormat.LP, 2026, 11, 88, 1_400),
-            ArtistRelease("2", "Architectural Echoes", ReleaseFormat.EP, 2024, 5, 91, 820),
-            ArtistRelease("3", "Static Void Phase", ReleaseFormat.SINGLE, 2023, 1, 94, 2_100)
+            ArtistRelease("1", "Bloom Atlas", ReleaseFormat.LP, 2026, 11, 88, 1_400, albumId = "1"),
+            ArtistRelease("2", "Architectural Echoes", ReleaseFormat.EP, 2024, 5, 91, 820, albumId = "2"),
+            ArtistRelease("3", "Static Void Phase", ReleaseFormat.SINGLE, 2023, 1, 94, 2_100, albumId = "5")
         )
     }
 
     override suspend fun getPopularTracks(artistId: String): List<ArtistTrack> {
         delay(300)
         return listOf(
-            ArtistTrack(1, "Hyperbloom", "Bloom Atlas · 3:42", 1_200_000),
-            ArtistTrack(2, "Neon Drift", "Bloom Atlas · 4:15", 940_000),
-            ArtistTrack(3, "Obsidian Frame", "Single · 4:12", 680_000)
+            ArtistTrack(id = "1", rank = 1, title = "Hyperbloom", subtitle = "Bloom Atlas · 3:42", playCount = 1_200_000, albumId = "1"),
+            ArtistTrack(id = "2", rank = 2, title = "Neon Drift", subtitle = "Bloom Atlas · 4:15", playCount = 940_000, albumId = "1"),
+            // Standalone single, no parent album to navigate to.
+            ArtistTrack(id = "3", rank = 3, title = "Obsidian Frame", subtitle = "Single · 4:12", playCount = 680_000, albumId = null)
         )
     }
 }
