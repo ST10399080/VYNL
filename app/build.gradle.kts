@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.ksp)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
     id("com.google.gms.google-services")
 }
 
@@ -21,15 +22,15 @@ val lastFmApiKey =
     localProperties.getProperty("LASTFM_API_KEY") ?: ""
 
 android {
-    namespace = "com.example.vynl"
+    namespace = "com.example.vynl_app"
 
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.vynl"
-        minSdk = 23
+        applicationId = "com.example.vynl_app"
+        minSdk = 24
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -65,7 +66,7 @@ android {
 }
 
 dependencies {
-    //Firebase
+    // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
 
@@ -79,8 +80,20 @@ dependencies {
 
     // Android
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.constraintlayout)
+
+    // Lifecycle
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    // Kotlin Serialization
+    implementation(libs.kotlinx.serialization.json)
 
     // Jetpack Compose
     implementation(platform(libs.androidx.compose.bom))
