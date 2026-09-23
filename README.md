@@ -176,7 +176,7 @@ Possible challenge types include:
 
 ## 📱 Backend
 
-* REST API
+* REST API (Last.fm API)
 * JSON
 * HTTP
 
@@ -215,6 +215,7 @@ Possible challenge types include:
 * IntelliJ IDEA
 * Postman
 * Figma
+* Framer
 * GitHub Projects
 
 ---
@@ -289,9 +290,8 @@ Security features include:
 
 # 🌐 API Integration
 
-The application communicates with a REST API to:
+The application communicates with a REST API (Last.fm API) to:
 
-* Authenticate Users
 * Retrieve Album Information
 * Retrieve Artist Information
 * Store Ratings
@@ -306,7 +306,7 @@ The application communicates with a REST API to:
 ## Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/undefined.git
+git clone https://github.com/ST10399080/VYNL.git
 ```
 
 ---
