@@ -22,14 +22,14 @@ val lastFmApiKey =
     localProperties.getProperty("LASTFM_API_KEY") ?: ""
 
 android {
-    namespace = "com.example.vynl_app"
+    namespace = "com.example.vynl"
 
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.vynl_app"
+        applicationId = "com.example.vynl"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
