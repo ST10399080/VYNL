@@ -391,6 +391,24 @@ Contributions are welcome through:
 
 ---
 
+# 📷 Screenshots Of Application Running
+
+
+
+---
+
+# 🗒️ Release Notes
+
+
+
+---
+
+# 🧾 Evidence Of Publication Preparation
+
+
+
+---
+
 # 📄 License
 
 This project is licensed under the **MIT License**.
@@ -401,7 +419,7 @@ See [LICENSE](LICENSE) for full details.
 
 # 👨‍💻 Author
 
-**Developer:** 
+**Developers:** 
 * Fezile Jam-Jam (ST10399080)
 * Tumelo Teka (ST10126814)
 * Ivant Wambo (ST10448302)
