@@ -393,17 +393,61 @@ Contributions are welcome through:
 
 # 📷 Screenshots Of Application Running
 
+## Part 2
+
+### Album Search Screen
+
+<img width="720" height="1600" alt="Screenshot_20260929_220726_vynl_app" src="https://github.com/user-attachments/assets/b743fd6b-72aa-4927-99a1-cc695ccc208d" />
+
+### Album Screen
+
+<img width="720" height="1600" alt="Screenshot_20260929_220735_vynl_app" src="https://github.com/user-attachments/assets/c7a179ab-8977-4b54-ac37-67a40fc89211" />
+
+### Artist Search Screen
+
+<img width="720" height="1600" alt="Screenshot_20260929_215414_vynl_app" src="https://github.com/user-attachments/assets/60335a42-73e2-4b19-a1ac-5f22f4542ac8" />
+
+### Artist Screen
+
+<img width="720" height="1600" alt="Screenshot_20260929_215424_vynl_app" src="https://github.com/user-attachments/assets/c6b53e96-a5aa-4703-b53a-1a9c4c33bd02" />
+
+### Artist Screen (Continued)
+
+<img width="720" height="1600" alt="Screenshot_20260929_215428_vynl_app" src="https://github.com/user-attachments/assets/088a186d-0d64-42b9-9363-2a5285c60b1e" />
+
+### Profile Screen
+
+<img width="720" height="1600" alt="Screenshot_20260929_220535_vynl_app" src="https://github.com/user-attachments/assets/e19025b8-4182-409c-968e-e376599dea20" />
+
+### Daily Music Challenge Feature
+
+<img width="720" height="1600" alt="Screenshot_20260929_220601_vynl_app" src="https://github.com/user-attachments/assets/6e4a9645-b840-4810-85a9-7cebccdeceb0" />
+
+### Daily Music Challenge Feature (Continued)
+
+<img width="720" height="1600" alt="Screenshot_20260929_220651_vynl_app" src="https://github.com/user-attachments/assets/f4afe16d-001f-4b22-bf0b-a4eecd0235c9" />
+
+### Daily Music Challenge Feature (Continued)
+
+<img width="720" height="1600" alt="Screenshot_20260929_220655_vynl_app" src="https://github.com/user-attachments/assets/7bf52cb5-5412-4535-b210-628779ac6aeb" />
+
+### Daily Music Challenge Feature (Continued)
+
+<img width="720" height="1600" alt="Screenshot_20260929_220701_vynl_app" src="https://github.com/user-attachments/assets/51cf0796-098d-458e-8f84-9b3d6ca5ee4c" />
+
+### Daily Music Challenge Leaderboard Feature 
+
+<img width="720" height="1600" alt="Screenshot_20260929_220705_vynl_app" src="https://github.com/user-attachments/assets/6f04a770-12a4-4e21-aa70-3e79ed802c02" />
+
+---
+
+# 🗒️ Release Notes (POE)
+
 
 
 ---
 
-# 🗒️ Release Notes
-
-
-
----
-
-# 🧾 Evidence Of Publication Preparation
+# 🧾 Evidence Of Publication Preparation (POE)
 
 
 
