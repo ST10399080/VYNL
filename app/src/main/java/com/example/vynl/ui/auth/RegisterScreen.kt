@@ -1,4 +1,4 @@
-package com.example.vynl.ui.screen.auth
+package com.example.vynl.ui.auth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +15,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -24,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -40,32 +42,38 @@ private val VynlText = Color(0xFFF5F3FF)
 private val VynlSecondaryText = Color(0xFFB8AEC8)
 
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     authViewModel: AuthViewModel,
-    onLoginSuccess: () -> Unit,
-    onRegisterClick: () -> Unit
+    onRegisterSuccess: () -> Unit,
+    onLoginClick: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var validationError by remember { mutableStateOf<String?>(null) }
 
     val currentUser by authViewModel.currentUser.collectAsState()
     val isLoading by authViewModel.isLoading.collectAsState()
     val errorMessage by authViewModel.errorMessage.collectAsState()
 
-    /*
-     * Only trigger the success callback when Firebase
-     * reports that a user has successfully authenticated.
-     */
     LaunchedEffect(currentUser) {
         if (currentUser != null) {
-            onLoginSuccess()
+            onRegisterSuccess()
         }
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(VynlBackground)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        VynlBackground,
+                        Color(0xFF120A22),
+                        VynlBackground
+                    )
+                )
+            )
             .padding(horizontal = 28.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -73,34 +81,35 @@ fun LoginScreen(
 
         Text(
             text = "VYNL",
-            color = VynlText,
             fontSize = 42.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = VynlText,
+            letterSpacing = 4.sp
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = "Discover. Rate. Remember.",
-            color = VynlSecondaryText,
-            fontSize = 15.sp
+            fontSize = 14.sp,
+            color = VynlSecondaryText
         )
 
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(36.dp))
 
         Text(
-            text = "Welcome back",
-            color = VynlText,
-            fontSize = 26.sp,
-            fontWeight = FontWeight.SemiBold
+            text = "Create your account",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            color = VynlText
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Sign in to continue your music journey.",
-            color = VynlSecondaryText,
-            fontSize = 14.sp
+            text = "Start your music journey with VYNL.",
+            fontSize = 14.sp,
+            color = VynlSecondaryText
         )
 
         Spacer(modifier = Modifier.height(28.dp))
@@ -109,13 +118,14 @@ fun LoginScreen(
             value = email,
             onValueChange = {
                 email = it
+                validationError = null
                 authViewModel.clearError()
             },
+            modifier = Modifier.fillMaxWidth(),
             label = {
                 Text("Email")
             },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = VynlCyan,
@@ -134,15 +144,16 @@ fun LoginScreen(
             value = password,
             onValueChange = {
                 password = it
+                validationError = null
                 authViewModel.clearError()
             },
+            modifier = Modifier.fillMaxWidth(),
             label = {
                 Text("Password")
             },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(14.dp),
             visualTransformation = PasswordVisualTransformation(),
+            shape = RoundedCornerShape(14.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = VynlPink,
                 unfocusedBorderColor = VynlSurface,
@@ -156,9 +167,38 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (errorMessage != null) {
+        OutlinedTextField(
+            value = confirmPassword,
+            onValueChange = {
+                confirmPassword = it
+                validationError = null
+                authViewModel.clearError()
+            },
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+                Text("Confirm Password")
+            },
+            singleLine = true,
+            visualTransformation = PasswordVisualTransformation(),
+            shape = RoundedCornerShape(14.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = VynlPurple,
+                unfocusedBorderColor = VynlSurface,
+                focusedLabelColor = VynlPurple,
+                unfocusedLabelColor = VynlSecondaryText,
+                focusedTextColor = VynlText,
+                unfocusedTextColor = VynlText,
+                cursorColor = VynlPurple
+            )
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        val displayedError = validationError ?: errorMessage
+
+        if (displayedError != null) {
             Text(
-                text = errorMessage!!,
+                text = displayedError,
                 color = Color(0xFFFF6B6B),
                 fontSize = 13.sp,
                 modifier = Modifier
@@ -171,57 +211,73 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                authViewModel.login(
-                    email = email.trim(),
-                    password = password
-                )
+                when {
+                    email.isBlank() -> {
+                        validationError = "Please enter your email address."
+                    }
+
+                    password.isBlank() -> {
+                        validationError = "Please enter a password."
+                    }
+
+                    password.length < 6 -> {
+                        validationError =
+                            "Password must be at least 6 characters."
+                    }
+
+                    confirmPassword.isBlank() -> {
+                        validationError =
+                            "Please confirm your password."
+                    }
+
+                    password != confirmPassword -> {
+                        validationError =
+                            "Passwords do not match."
+                    }
+
+                    else -> {
+                        validationError = null
+
+                        authViewModel.register(
+                            email = email.trim(),
+                            password = password
+                        )
+                    }
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(52.dp),
-            enabled = !isLoading &&
-                    email.isNotBlank() &&
-                    password.isNotBlank(),
+                .height(54.dp),
+            enabled = !isLoading,
             shape = RoundedCornerShape(14.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = VynlPurple,
-                contentColor = VynlText
+                contentColor = Color.White
             )
         ) {
             if (isLoading) {
                 CircularProgressIndicator(
-                    color = VynlText,
+                    color = Color.White,
                     strokeWidth = 2.dp
                 )
             } else {
                 Text(
-                    text = "Login",
+                    text = "Create Account",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(18.dp))
 
-        Text(
-            text = "Don't have an account?",
-            color = VynlSecondaryText,
-            fontSize = 14.sp
-        )
-
-        Spacer(modifier = Modifier.height(6.dp))
-
-        Button(
-            onClick = onRegisterClick,
-            colors = ButtonDefaults.textButtonColors(
-                contentColor = VynlCyan
-            )
+        TextButton(
+            onClick = onLoginClick,
+            enabled = !isLoading
         ) {
             Text(
-                text = "Create an account",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold
+                text = "Already have an account? Login",
+                color = VynlCyan
             )
         }
     }
