@@ -108,6 +108,17 @@
     <string name="settings_error_name_too_long">Display name must be 30 characters or fewer</string>
     <string name="settings_error_invalid_email">Enter a valid email address</string>
 
+    <!-- Push notifications -->
+    <string name="channel_recommendations">Recommendations</string>
+    <string name="channel_reviews">Reviews</string>
+    <string name="channel_friend_activity">Friend activity</string>
+    <string name="notification_test_title">VYNL test notification</string>
+    <string name="notification_test_body">Push notifications are working. Tap to open an album.</string>
+    <string name="settings_send_test_notification">Send test notification</string>
+    <string name="settings_notifications_blocked_title">Notifications are blocked</string>
+    <string name="settings_notifications_blocked_message">Allow notifications for VYNL in your phone\'s settings to receive recommendation, review and friend updates.</string>
+    <string name="settings_open_settings">Open settings</string>
+
     <plurals name="tier_remaining">
         <item quantity="one">%d remaining</item>
         <item quantity="other">%d remaining</item>

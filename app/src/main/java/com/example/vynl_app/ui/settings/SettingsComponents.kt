@@ -177,3 +177,18 @@ fun LanguageDialog(current: AppLanguage, onSelected: (AppLanguage) -> Unit, onDi
         }
     )
 }
+
+@Composable
+fun NotificationsBlockedDialog(onOpenSettings: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.settings_notifications_blocked_title)) },
+        text = { Text(stringResource(R.string.settings_notifications_blocked_message)) },
+        confirmButton = {
+            TextButton(onClick = onOpenSettings) { Text(stringResource(R.string.settings_open_settings)) }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) }
+        }
+    )
+}

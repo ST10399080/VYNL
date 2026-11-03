@@ -1,5 +1,6 @@
 package com.example.vynl_app
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.SystemBarStyle
@@ -7,9 +8,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -31,6 +35,8 @@ import com.example.vynl_app.data.settings.settingsDataStore
 import com.example.vynl_app.data.song.FakeSongSearchRepository
 import com.example.vynl_app.data.tierlist.FakeTierListRepository
 import com.example.vynl_app.data.tierlist.TierListMode
+import com.example.vynl_app.notifications.NotificationHelper
+import com.example.vynl_app.notifications.PushRegistrar
 import com.example.vynl_app.ui.albumdetail.AlbumDetailScreen
 import com.example.vynl_app.ui.albumdetail.AlbumDetailViewModel
 import com.example.vynl_app.ui.artistdetail.ArtistDetailScreen
@@ -62,8 +68,22 @@ import com.example.vynl_app.ui.tierlistviewer.TierListViewerViewModel
 
 // AppCompatActivity (not ComponentActivity) so per-app language switching also works below Android 13.
 class MainActivity : AppCompatActivity() {
+    // Album to open because a notification was tapped; consumed once by the NavHost below.
+    private var pendingAlbumId by mutableStateOf<String?>(null)
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        pendingAlbumId = intent.getStringExtra(NotificationHelper.EXTRA_ALBUM_ID)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Only on a fresh launch — a rotation/language change re-delivers the same intent.
+        if (savedInstanceState == null) {
+            pendingAlbumId = intent.getStringExtra(NotificationHelper.EXTRA_ALBUM_ID)
+        }
+        PushRegistrar.logToken(applicationContext)
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
             navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
@@ -72,6 +92,10 @@ class MainActivity : AppCompatActivity() {
             // Settings live on-device (DataStore); the theme is applied here so every screen follows it.
             val settingsRepository = remember { DataStoreSettingsRepository(applicationContext.settingsDataStore) }
             val accountRepository = remember { FakeAccountRepository() }
+            // Keep FCM topic subscriptions in step with the user's notification settings.
+            LaunchedEffect(settingsRepository) {
+                settingsRepository.settings.collect { PushRegistrar.syncTopics(applicationContext, it) }
+            }
             val settings by settingsRepository.settings.collectAsState(initial = AppSettings())
             val darkTheme = when (settings.themeMode) {
                 ThemeMode.SYSTEM -> isSystemInDarkTheme()
@@ -95,6 +119,14 @@ class MainActivity : AppCompatActivity() {
                 // Builder is visible immediately from Preview.
                 val tierListRepository = remember { FakeTierListRepository() }
                 val homeFeedRepository = remember { FakeHomeFeedRepository() }
+
+                // A tapped notification asks to open an album.
+                LaunchedEffect(pendingAlbumId) {
+                    pendingAlbumId?.let { albumId ->
+                        navController.navigate(AlbumDetail(albumId))
+                        pendingAlbumId = null
+                    }
+                }
 
                 NavHost(navController = navController, startDestination = HomeFeed) {
                     composable<HomeFeed> {

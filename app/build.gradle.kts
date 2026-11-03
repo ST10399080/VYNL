@@ -4,6 +4,13 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+// Firebase config (google-services.json) is not committed — the repo is public. The plugin is only
+// applied when the file is present, so builds (including CI) still work without it; push
+// notifications are simply inactive in that case. See docs/PUSH_NOTIFICATIONS_SETUP.md.
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+}
+
 android {
     namespace = "com.example.vynl_app"
     compileSdk {
@@ -58,4 +65,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
 }

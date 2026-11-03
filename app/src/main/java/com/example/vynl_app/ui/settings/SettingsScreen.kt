@@ -26,13 +26,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import com.example.vynl_app.R
 import com.example.vynl_app.data.settings.NotificationCategory
 import com.example.vynl_app.data.settings.ThemeMode
+import com.example.vynl_app.notifications.NotificationHelper
 import com.example.vynl_app.ui.language.LanguageManager
+import com.example.vynl_app.ui.notifications.openAppNotificationSettings
+import com.example.vynl_app.ui.notifications.rememberNotificationPermissionRequest
 import com.example.vynl_app.ui.theme.VynlColors
 
 @Composable
@@ -46,6 +52,20 @@ fun SettingsScreen(
     var showAccountDialog by remember { mutableStateOf(false) }
     var currentLanguage by remember { mutableStateOf(LanguageManager.current()) }
     val settings = state.settings
+
+    // Notifications only work when BOTH our setting and the system permission allow them.
+    val context = LocalContext.current
+    var osAllowed by remember { mutableStateOf(NotificationHelper.canPost(context)) }
+    var showBlockedDialog by remember { mutableStateOf(false) }
+    // The user may have changed the permission in the system settings while we were away.
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { osAllowed = NotificationHelper.canPost(context) }
+    val requestPermission = rememberNotificationPermissionRequest { granted ->
+        osAllowed = NotificationHelper.canPost(context)
+        if (granted) viewModel.onNotificationsToggled(true) else showBlockedDialog = true
+    }
+    val notificationsActive = settings.notificationsEnabled && osAllowed
+    val testTitle = stringResource(R.string.notification_test_title)
+    val testBody = stringResource(R.string.notification_test_body)
 
     Column(
         Modifier
@@ -102,26 +122,40 @@ fun SettingsScreen(
             SettingsSection(stringResource(R.string.settings_notifications)) {
                 SettingsSwitchRow(
                     label = stringResource(R.string.settings_notifications_enable),
-                    checked = settings.notificationsEnabled,
-                    onCheckedChange = { viewModel.onNotificationsToggled(it) }
+                    checked = notificationsActive,
+                    onCheckedChange = { enabled ->
+                        if (enabled) requestPermission() else viewModel.onNotificationsToggled(false)
+                    }
                 )
                 SettingsSwitchRow(
                     label = stringResource(R.string.settings_notify_recommendations),
                     checked = settings.notifyRecommendations,
-                    enabled = settings.notificationsEnabled,
+                    enabled = notificationsActive,
                     onCheckedChange = { viewModel.onCategoryToggled(NotificationCategory.RECOMMENDATIONS, it) }
                 )
                 SettingsSwitchRow(
                     label = stringResource(R.string.settings_notify_reviews),
                     checked = settings.notifyReviews,
-                    enabled = settings.notificationsEnabled,
+                    enabled = notificationsActive,
                     onCheckedChange = { viewModel.onCategoryToggled(NotificationCategory.REVIEWS, it) }
                 )
                 SettingsSwitchRow(
                     label = stringResource(R.string.settings_notify_friend_activity),
                     checked = settings.notifyFriendActivity,
-                    enabled = settings.notificationsEnabled,
+                    enabled = notificationsActive,
                     onCheckedChange = { viewModel.onCategoryToggled(NotificationCategory.FRIEND_ACTIVITY, it) }
+                )
+                // Lets you (and a marker) see a notification arrive and open Album Detail when tapped.
+                SettingsNavRow(
+                    label = stringResource(R.string.settings_send_test_notification),
+                    value = "",
+                    onClick = {
+                        if (osAllowed) {
+                            NotificationHelper.show(context, testTitle, testBody, NotificationCategory.RECOMMENDATIONS, albumId = "1")
+                        } else {
+                            showBlockedDialog = true
+                        }
+                    }
                 )
             }
 
@@ -167,6 +201,16 @@ fun SettingsScreen(
             error = accountError,
             onSave = { name, email -> viewModel.onSaveAccount(name, email) { showAccountDialog = false } },
             onDismiss = { showAccountDialog = false }
+        )
+    }
+
+    if (showBlockedDialog) {
+        NotificationsBlockedDialog(
+            onOpenSettings = {
+                showBlockedDialog = false
+                openAppNotificationSettings(context)
+            },
+            onDismiss = { showBlockedDialog = false }
         )
     }
 }
