@@ -18,6 +18,9 @@ data class ArtistDetail(val artistId: String)
 data object Lists
 
 @Serializable
+data object Settings
+
+@Serializable
 data class ListDetail(val listId: String)
 
 // mode is "ALBUMS" or "SONGS" — passed as a plain string, not the domain enum, so this

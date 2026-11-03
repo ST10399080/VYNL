@@ -49,7 +49,8 @@ fun HomeFeedScreen(
     onNotificationsClick: () -> Unit = {},
     onAlbumClick: (String) -> Unit = {},
     onArtistClick: (String) -> Unit = {},
-    onMyListsClick: () -> Unit = {}
+    onMyListsClick: () -> Unit = {},
+    onSettingsClick: () -> Unit = {}
 ) {
     val hero by viewModel.hero.collectAsState()
     val trending by viewModel.trending.collectAsState()
@@ -88,6 +89,13 @@ fun HomeFeedScreen(
                             onClick = {
                                 showMenu = false
                                 onMyListsClick()
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.menu_settings)) },
+                            onClick = {
+                                showMenu = false
+                                onSettingsClick()
                             }
                         )
                     }

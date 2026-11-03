@@ -33,6 +33,7 @@ private val CardShape = RoundedCornerShape(7.dp)
 // distinct accent border, lower tiers fade toward neutral) — D isn't in the pulled frame,
 // so it continues that fade using the app's own muted-border token rather than inventing
 // an unrelated color.
+@Composable
 private fun tierColor(rank: TierRank): Color = when (rank) {
     TierRank.S -> Color(0xFFFF00B8)
     TierRank.A -> Color(0xFFFFCB45)

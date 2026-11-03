@@ -5,12 +5,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.vynl_app.data.account.FakeAccountRepository
 import com.example.vynl_app.data.album.FakeAlbumRepository
 import com.example.vynl_app.data.album.FakeSearchRepository
 import com.example.vynl_app.data.artist.FakeArtistRepository
@@ -19,6 +24,10 @@ import com.example.vynl_app.data.home.FakeHomeFeedRepository
 import com.example.vynl_app.data.list.FakeListRepository
 import com.example.vynl_app.data.rating.FakeRatingRepository
 import com.example.vynl_app.data.review.FakeReviewRepository
+import com.example.vynl_app.data.settings.AppSettings
+import com.example.vynl_app.data.settings.DataStoreSettingsRepository
+import com.example.vynl_app.data.settings.ThemeMode
+import com.example.vynl_app.data.settings.settingsDataStore
 import com.example.vynl_app.data.song.FakeSongSearchRepository
 import com.example.vynl_app.data.tierlist.FakeTierListRepository
 import com.example.vynl_app.data.tierlist.TierListMode
@@ -38,10 +47,13 @@ import com.example.vynl_app.ui.navigation.HomeFeed
 import com.example.vynl_app.ui.navigation.ListDetail
 import com.example.vynl_app.ui.navigation.Lists
 import com.example.vynl_app.ui.navigation.Search
+import com.example.vynl_app.ui.navigation.Settings
 import com.example.vynl_app.ui.navigation.TierListBuilder
 import com.example.vynl_app.ui.navigation.TierListViewer
 import com.example.vynl_app.ui.search.SearchScreen
 import com.example.vynl_app.ui.search.SearchViewModel
+import com.example.vynl_app.ui.settings.SettingsScreen
+import com.example.vynl_app.ui.settings.SettingsViewModel
 import com.example.vynl_app.ui.theme.VynlTheme
 import com.example.vynl_app.ui.tierlistbuilder.TierListBuilderScreen
 import com.example.vynl_app.ui.tierlistbuilder.TierListBuilderViewModel
@@ -57,7 +69,24 @@ class MainActivity : AppCompatActivity() {
             navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
         )
         setContent {
-            VynlTheme {
+            // Settings live on-device (DataStore); the theme is applied here so every screen follows it.
+            val settingsRepository = remember { DataStoreSettingsRepository(applicationContext.settingsDataStore) }
+            val accountRepository = remember { FakeAccountRepository() }
+            val settings by settingsRepository.settings.collectAsState(initial = AppSettings())
+            val darkTheme = when (settings.themeMode) {
+                ThemeMode.SYSTEM -> isSystemInDarkTheme()
+                ThemeMode.LIGHT -> false
+                ThemeMode.DARK -> true
+            }
+            // Status/navigation bar icons must flip with the theme.
+            DisposableEffect(darkTheme) {
+                enableEdgeToEdge(
+                    statusBarStyle = SystemBarStyle.auto(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT) { darkTheme },
+                    navigationBarStyle = SystemBarStyle.auto(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT) { darkTheme }
+                )
+                onDispose { }
+            }
+            VynlTheme(themeMode = settings.themeMode) {
                 val navController = rememberNavController()
                 // Shared across Album Detail's Add to List sheet, Lists, and List Detail so
                 // a membership change made from one screen is visible from the others.
@@ -77,7 +106,8 @@ class MainActivity : AppCompatActivity() {
                             onSearchClick = { navController.navigate(Search) },
                             onAlbumClick = { albumId -> navController.navigate(AlbumDetail(albumId)) },
                             onArtistClick = { artistId -> navController.navigate(ArtistDetail(artistId)) },
-                            onMyListsClick = { navController.navigate(Lists) }
+                            onMyListsClick = { navController.navigate(Lists) },
+                            onSettingsClick = { navController.navigate(Settings) }
                         )
                     }
 
@@ -115,6 +145,19 @@ class MainActivity : AppCompatActivity() {
                             onSearchClick = { navController.navigate(Search) },
                             onArtistClick = { artistId -> navController.navigate(ArtistDetail(artistId)) },
                             onMyListsClick = { navController.navigate(Lists) }
+                        )
+                    }
+
+                    composable<Settings> {
+                        val viewModel: SettingsViewModel = viewModel {
+                            SettingsViewModel(
+                                settingsRepository = settingsRepository,
+                                accountRepository = accountRepository
+                            )
+                        }
+                        SettingsScreen(
+                            viewModel = viewModel,
+                            onBack = { navController.popBackStack() }
                         )
                     }
 
