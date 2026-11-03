@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vynl_app.data.list.CustomList
 import com.example.vynl_app.ui.theme.VynlColors
+import androidx.compose.ui.res.stringResource
+import com.example.vynl_app.R
 
 private val Label = TextStyle(fontSize = 12.sp, letterSpacing = 1.2.sp)
 private val Body = TextStyle(fontSize = 14.sp, letterSpacing = (-0.42).sp)
@@ -66,12 +68,12 @@ fun AddToListSheet(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("ADD TO LIST", color = VynlColors.TextSecondary, style = Label)
+            Text(stringResource(R.string.list_add_title), color = VynlColors.TextSecondary, style = Label)
             IconButton(
                 onClick = onDismiss,
                 modifier = Modifier.size(32.dp).background(VynlColors.SurfaceVariant, CircleShape)
             ) {
-                Icon(Icons.Filled.Close, contentDescription = "Dismiss", tint = VynlColors.TextPrimary, modifier = Modifier.size(14.dp))
+                Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.action_dismiss), tint = VynlColors.TextPrimary, modifier = Modifier.size(14.dp))
             }
         }
 
@@ -79,7 +81,7 @@ fun AddToListSheet(
             OutlinedTextField(
                 value = newListName,
                 onValueChange = { newListName = it },
-                placeholder = { Text("New list name") },
+                placeholder = { Text(stringResource(R.string.list_new_name)) },
                 singleLine = true,
                 modifier = Modifier.weight(1f)
             )
@@ -92,7 +94,7 @@ fun AddToListSheet(
                 },
                 modifier = Modifier.size(48.dp).background(VynlColors.SurfaceVariant, CardShape)
             ) {
-                Icon(Icons.Filled.Add, contentDescription = "Create list", tint = VynlColors.TextPrimary)
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.cd_create_list), tint = VynlColors.TextPrimary)
             }
         }
 

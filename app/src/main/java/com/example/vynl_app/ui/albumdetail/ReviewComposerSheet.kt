@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vynl_app.ui.rating.StarRatingBar
 import com.example.vynl_app.ui.theme.VynlColors
+import androidx.compose.ui.res.stringResource
+import com.example.vynl_app.R
 
 private const val REVIEW_MAX_LENGTH = 500
 
@@ -74,12 +76,12 @@ fun ReviewComposerSheet(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("WRITE A REVIEW", color = VynlColors.TextSecondary, style = ComposerText.Label)
+            Text(stringResource(R.string.review_sheet_title), color = VynlColors.TextSecondary, style = ComposerText.Label)
             IconButton(
                 onClick = onDismiss,
                 modifier = Modifier.size(32.dp).background(VynlColors.SurfaceVariant, CircleShape)
             ) {
-                Icon(Icons.Filled.Close, contentDescription = "Dismiss", tint = VynlColors.TextPrimary, modifier = Modifier.size(14.dp))
+                Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.action_dismiss), tint = VynlColors.TextPrimary, modifier = Modifier.size(14.dp))
             }
         }
 
@@ -109,7 +111,7 @@ fun ReviewComposerSheet(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text("SELECT RATING", color = VynlColors.TextSecondary, style = ComposerText.Label)
+            Text(stringResource(R.string.rating_select), color = VynlColors.TextSecondary, style = ComposerText.Label)
             StarRatingBar(currentRating = currentRating, onRatingSelected = onRatingSelected)
         }
 
@@ -121,13 +123,13 @@ fun ReviewComposerSheet(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("CRITIQUE", color = VynlColors.TextSecondary, style = ComposerText.Label)
+                Text(stringResource(R.string.review_critique), color = VynlColors.TextSecondary, style = ComposerText.Label)
                 Text("${reviewText.length} / $REVIEW_MAX_LENGTH", color = VynlColors.TextSecondary, style = ComposerText.Caption)
             }
             OutlinedTextField(
                 value = reviewText,
                 onValueChange = { if (it.length <= REVIEW_MAX_LENGTH) onReviewTextChanged(it) },
-                placeholder = { Text("What did you think?") },
+                placeholder = { Text(stringResource(R.string.review_placeholder)) },
                 minLines = 4,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -138,7 +140,7 @@ fun ReviewComposerSheet(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Share to Community Feed", color = VynlColors.TextPrimary, style = ComposerText.Body)
+            Text(stringResource(R.string.review_share_community), color = VynlColors.TextPrimary, style = ComposerText.Body)
             // TODO: no Activity Feed exists yet (design doc section 9) to actually share into.
             // Toggle works visually; its state isn't read by onPostReview below.
             Switch(
@@ -156,10 +158,10 @@ fun ReviewComposerSheet(
                 colors = ButtonDefaults.buttonColors(containerColor = VynlColors.TextPrimary, contentColor = VynlColors.OnAccent),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Post Review")
+                Text(stringResource(R.string.review_post))
             }
             Text(
-                "Saved to your personal listening catalog automatically",
+                stringResource(R.string.review_saved_note),
                 color = VynlColors.TextSecondary,
                 style = ComposerText.Caption,
                 textAlign = TextAlign.Center

@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.sp
 import com.example.vynl_app.data.tierlist.TierRank
 import com.example.vynl_app.ui.theme.VynlColors
 import com.example.vynl_app.ui.tierlistbuilder.TierListDisplayItem
+import androidx.compose.ui.res.stringResource
+import com.example.vynl_app.R
 
 private val CardShape = RoundedCornerShape(7.dp)
 
@@ -57,9 +59,9 @@ fun TierListViewerScreen(viewModel: TierListViewerViewModel, onBack: () -> Unit 
         Column(Modifier.fillMaxWidth().background(VynlColors.Background).windowInsetsPadding(WindowInsets.statusBars)) {
             Box(Modifier.fillMaxWidth().height(48.dp).padding(horizontal = 4.dp)) {
                 IconButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterStart).alpha(0.8f)) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back), tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
                 }
-                Text("Tier List", modifier = Modifier.align(Alignment.Center), color = VynlColors.TextPrimary, fontSize = 16.sp)
+                Text(stringResource(R.string.tierlist_viewer_title), modifier = Modifier.align(Alignment.Center), color = VynlColors.TextPrimary, fontSize = 16.sp)
             }
         }
 

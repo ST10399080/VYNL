@@ -17,6 +17,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.example.vynl_app.R
 
 @Composable
 fun SearchScreen(
@@ -37,7 +39,7 @@ fun SearchScreen(
                 text = it
                 viewModel.onQueryChanged(it) // triggers the debounced search, not an immediate one
             },
-            label = { Text("Search albums, songs, artists...") },
+            label = { Text(stringResource(R.string.search_hint)) },
             modifier = Modifier.fillMaxWidth()
         )
 

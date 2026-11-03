@@ -17,7 +17,9 @@ import kotlinx.coroutines.launch
 data class TierListDisplayItem(
     val itemId: String,
     val title: String,
-    val subtitle: String
+    val subtitle: String,
+    // Set for albums so the UI can render a localized, pluralized "N tracks".
+    val trackCount: Int? = null
 )
 
 // Only depends on the repository INTERFACES, not concrete classes.
@@ -63,7 +65,8 @@ class TierListBuilderViewModel(
             TierListDisplayItem(
                 itemId = release.albumId,
                 title = release.title,
-                subtitle = "${release.year} · ${release.format.name} · ${release.trackCount} tracks"
+                subtitle = "${release.year} · ${release.format.name}",
+                trackCount = release.trackCount
             )
         }
         TierListMode.SONGS -> artistRepository.getPopularTracks(artistId).map { track ->

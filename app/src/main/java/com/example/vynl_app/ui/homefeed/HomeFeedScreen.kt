@@ -38,6 +38,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vynl_app.ui.theme.VynlColors
+import androidx.compose.ui.res.stringResource
+import com.example.vynl_app.R
 
 @Composable
 fun HomeFeedScreen(
@@ -71,18 +73,18 @@ fun HomeFeedScreen(
             )
             Row(Modifier.align(Alignment.CenterEnd)) {
                 IconButton(onClick = onSearchClick, modifier = Modifier.alpha(0.8f)) {
-                    Icon(Icons.Filled.Search, contentDescription = "Search", tint = VynlColors.TextPrimary, modifier = Modifier.size(18.dp))
+                    Icon(Icons.Filled.Search, contentDescription = stringResource(R.string.action_search), tint = VynlColors.TextPrimary, modifier = Modifier.size(18.dp))
                 }
                 IconButton(onClick = onNotificationsClick, modifier = Modifier.alpha(0.8f)) {
-                    Icon(Icons.Filled.Notifications, contentDescription = "Notifications", tint = VynlColors.TextPrimary, modifier = Modifier.size(18.dp))
+                    Icon(Icons.Filled.Notifications, contentDescription = stringResource(R.string.home_notifications), tint = VynlColors.TextPrimary, modifier = Modifier.size(18.dp))
                 }
                 Box {
                     IconButton(onClick = { showMenu = true }, modifier = Modifier.alpha(0.8f)) {
-                        Icon(Icons.Filled.MoreVert, contentDescription = "More options", tint = VynlColors.TextPrimary, modifier = Modifier.size(18.dp))
+                        Icon(Icons.Filled.MoreVert, contentDescription = stringResource(R.string.action_more_options), tint = VynlColors.TextPrimary, modifier = Modifier.size(18.dp))
                     }
                     DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
                         DropdownMenuItem(
-                            text = { Text("My Lists") },
+                            text = { Text(stringResource(R.string.menu_my_lists)) },
                             onClick = {
                                 showMenu = false
                                 onMyListsClick()
@@ -108,7 +110,7 @@ fun HomeFeedScreen(
                     onArtistClick = { onArtistClick(hero!!.artistId) }
                 )
 
-                Text("Top", color = VynlColors.TextPrimary, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                Text(stringResource(R.string.home_tab_top), color = VynlColors.TextPrimary, fontSize = 16.sp, fontWeight = FontWeight.Medium)
 
                 Column {
                     trending.forEachIndexed { index, album ->

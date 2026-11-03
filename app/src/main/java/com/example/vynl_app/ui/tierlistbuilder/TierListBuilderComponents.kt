@@ -23,6 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vynl_app.data.tierlist.TierRank
 import com.example.vynl_app.ui.theme.VynlColors
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
+import com.example.vynl_app.R
 
 private val CardShape = RoundedCornerShape(7.dp)
 
@@ -38,12 +41,13 @@ private fun tierColor(rank: TierRank): Color = when (rank) {
     TierRank.D -> VynlColors.BorderMuted
 }
 
+@Composable
 private fun tierLabel(rank: TierRank): String = when (rank) {
-    TierRank.S -> "ELITE"
-    TierRank.A -> "HEAVY"
-    TierRank.B -> "SOLID"
-    TierRank.C -> "MID"
-    TierRank.D -> "WEAK"
+    TierRank.S -> stringResource(R.string.tier_label_s)
+    TierRank.A -> stringResource(R.string.tier_label_a)
+    TierRank.B -> stringResource(R.string.tier_label_b)
+    TierRank.C -> stringResource(R.string.tier_label_c)
+    TierRank.D -> stringResource(R.string.tier_label_d)
 }
 
 @Composable
@@ -84,7 +88,7 @@ fun TierRow(
                     .border(1.dp, VynlColors.BorderMuted, RoundedCornerShape(7.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Tap a card to assign", color = VynlColors.TextSecondary, fontSize = 11.sp)
+                Text(stringResource(R.string.tierlist_tap_to_assign), color = VynlColors.TextSecondary, fontSize = 11.sp)
             }
         } else {
             LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -109,15 +113,15 @@ fun TrayRow(
 ) {
     Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("Unranked", color = VynlColors.TextPrimary, fontSize = 16.sp)
+            Text(stringResource(R.string.tierlist_unranked), color = VynlColors.TextPrimary, fontSize = 16.sp)
             Text(
-                if (items.size == 1) "1 remaining" else "${items.size} remaining",
+                pluralStringResource(R.plurals.tier_remaining, items.size, items.size),
                 color = VynlColors.TextSecondary,
                 fontSize = 11.sp
             )
         }
         if (items.isEmpty()) {
-            Text("Everything's been ranked.", color = VynlColors.TextSecondary, fontSize = 12.sp)
+            Text(stringResource(R.string.tierlist_all_ranked), color = VynlColors.TextSecondary, fontSize = 12.sp)
         } else {
             LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(items) { item ->
@@ -149,7 +153,7 @@ private fun TierListItemCard(item: TierListDisplayItem, isSelected: Boolean, onC
     ) {
         Box(Modifier.size(64.dp).background(VynlColors.Surface, RoundedCornerShape(5.dp)))
         Text(item.title, color = VynlColors.TextPrimary, fontSize = 12.sp, maxLines = 1)
-        Text(item.subtitle, color = VynlColors.TextSecondary, fontSize = 10.sp, maxLines = 1)
+        Text(tierItemSubtitle(item), color = VynlColors.TextSecondary, fontSize = 10.sp, maxLines = 1)
     }
 }
 
@@ -165,7 +169,7 @@ fun SelectionInstructionRow(
 ) {
     Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(
-            if (selectedTitle != null) "Tap a tier to place “$selectedTitle”" else "Tap a card, then tap a tier to place it",
+            if (selectedTitle != null) stringResource(R.string.tierlist_tap_tier_to_place, selectedTitle) else stringResource(R.string.tierlist_tap_card_then_tier),
             color = VynlColors.TextSecondary,
             fontSize = 13.sp
         )
@@ -173,14 +177,14 @@ fun SelectionInstructionRow(
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 if (isSelectedItemPlaced) {
                     Text(
-                        "Move to Unranked",
+                        stringResource(R.string.tierlist_move_to_unranked),
                         color = VynlColors.Accent,
                         fontSize = 12.sp,
                         modifier = Modifier.clickable(onClick = onMoveToUnranked)
                     )
                 }
                 Text(
-                    "Cancel",
+                    stringResource(R.string.action_cancel),
                     color = VynlColors.TextSecondary,
                     fontSize = 12.sp,
                     modifier = Modifier.clickable(onClick = onCancel)
@@ -188,4 +192,11 @@ fun SelectionInstructionRow(
             }
         }
     }
+}
+
+
+@Composable
+private fun tierItemSubtitle(item: TierListDisplayItem): String {
+    val tracks = item.trackCount?.let { pluralStringResource(R.plurals.track_count, it, it) }
+    return listOfNotNull(item.subtitle.ifBlank { null }, tracks).joinToString(" · ")
 }

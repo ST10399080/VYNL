@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vynl_app.data.home.FeaturedAlbum
 import com.example.vynl_app.ui.theme.VynlColors
+import androidx.compose.ui.res.stringResource
+import com.example.vynl_app.R
 
 private val CardShape = RoundedCornerShape(8.dp)
 
@@ -52,7 +54,7 @@ fun HeroCard(
                 .background(Brush.verticalGradient(listOf(VynlColors.Background.copy(alpha = 0f), VynlColors.Background.copy(alpha = 0.85f))))
         )
         Text(
-            "#1 THIS WEEK",
+            stringResource(R.string.home_number_one),
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(12.dp)
