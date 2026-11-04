@@ -42,6 +42,7 @@ import com.example.vynl_app.R
 
 private val CardShape = RoundedCornerShape(7.dp)
 
+@Composable
 private fun tierColor(rank: TierRank): Color = when (rank) {
     TierRank.S -> Color(0xFFFF00B8)
     TierRank.A -> Color(0xFFFFCB45)

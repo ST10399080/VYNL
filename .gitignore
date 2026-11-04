@@ -13,3 +13,6 @@
 
 # User-specific / machine-specific IDE state
 .idea/
+
+# Firebase config — contains project identifiers; share privately, never commit (public repo)
+app/google-services.json
