@@ -2,6 +2,7 @@ package com.example.vynl_app
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -75,6 +76,7 @@ class MainActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         pendingAlbumId = intent.getStringExtra(NotificationHelper.EXTRA_ALBUM_ID)
+        Log.d("VYNL_FCM", "onNewIntent albumId=$pendingAlbumId")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         // Only on a fresh launch — a rotation/language change re-delivers the same intent.
         if (savedInstanceState == null) {
             pendingAlbumId = intent.getStringExtra(NotificationHelper.EXTRA_ALBUM_ID)
+            Log.d("VYNL_FCM", "onCreate albumId=$pendingAlbumId")
         }
         PushRegistrar.logToken(applicationContext)
         enableEdgeToEdge(
