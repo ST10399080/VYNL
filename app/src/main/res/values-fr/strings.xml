@@ -125,7 +125,7 @@
 
     <plurals name="album_count">
         <item quantity="one">%d album</item>
-        <item quantity="many">%d d'albums</item>
+        <item quantity="many">%d d\'albums</item>
         <item quantity="other">%d albums</item>
     </plurals>
 
