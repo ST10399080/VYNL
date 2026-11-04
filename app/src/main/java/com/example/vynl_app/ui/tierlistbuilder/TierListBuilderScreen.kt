@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vynl_app.data.tierlist.TierRank
 import com.example.vynl_app.ui.theme.VynlColors
+import androidx.compose.ui.res.stringResource
+import com.example.vynl_app.R
 
 @Composable
 fun TierListBuilderScreen(
@@ -50,13 +52,13 @@ fun TierListBuilderScreen(
         ) {
             Box(Modifier.fillMaxWidth().height(48.dp).padding(horizontal = 4.dp)) {
                 IconButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterStart).alpha(0.8f)) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back), tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
                 }
-                Text("Tier List Builder", modifier = Modifier.align(Alignment.Center), color = VynlColors.TextPrimary, fontSize = 16.sp)
+                Text(stringResource(R.string.tierlist_builder_title), modifier = Modifier.align(Alignment.Center), color = VynlColors.TextPrimary, fontSize = 16.sp)
                 TextButton(
                     onClick = { tierList?.let { onPreviewClick(it.id) } },
                     modifier = Modifier.align(Alignment.CenterEnd)
-                ) { Text("Preview", color = VynlColors.Accent) }
+                ) { Text(stringResource(R.string.tierlist_preview), color = VynlColors.Accent) }
             }
         }
 

@@ -41,7 +41,8 @@ class TierListViewerViewModel(
             TierListDisplayItem(
                 itemId = release.albumId,
                 title = release.title,
-                subtitle = "${release.year} · ${release.format.name} · ${release.trackCount} tracks"
+                subtitle = "${release.year} · ${release.format.name}",
+                trackCount = release.trackCount
             )
         }
         TierListMode.SONGS -> artistRepository.getPopularTracks(artistId).map { track ->

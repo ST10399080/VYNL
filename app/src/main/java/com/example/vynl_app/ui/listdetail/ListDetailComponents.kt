@@ -36,6 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vynl_app.data.list.CustomList
 import com.example.vynl_app.ui.theme.VynlColors
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
+import com.example.vynl_app.R
 
 private val CardShape = RoundedCornerShape(8.dp)
 
@@ -50,17 +53,17 @@ fun ListDetailTopBar(onBack: () -> Unit, onShare: () -> Unit = {}) {
         var showMenu by remember { mutableStateOf(false) }
         Box(Modifier.fillMaxWidth().height(48.dp).padding(horizontal = 4.dp)) {
             IconButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterStart).alpha(0.8f)) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back), tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
             }
             Row(modifier = Modifier.align(Alignment.CenterEnd)) {
                 // TODO: share this list (design doc section 9, "Shareable list links") — no
                 // deep-link scheme exists yet to build this against.
                 IconButton(onClick = onShare, modifier = Modifier.alpha(0.8f)) {
-                    Icon(Icons.Filled.Share, contentDescription = "Share list", tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
+                    Icon(Icons.Filled.Share, contentDescription = stringResource(R.string.cd_share_list), tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
                 }
                 Box {
                     IconButton(onClick = { showMenu = true }, modifier = Modifier.alpha(0.8f)) {
-                        Icon(Icons.Filled.MoreVert, contentDescription = "More options", tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
+                        Icon(Icons.Filled.MoreVert, contentDescription = stringResource(R.string.action_more_options), tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
                     }
                     // TODO: no menu contents specified anywhere (Figma frame 1:3431 never
                     // expands this menu, design doc doesn't say). Empty until a real need shows up.
@@ -81,7 +84,7 @@ fun ListDetailHeader(list: CustomList, modifier: Modifier = Modifier) {
         }
         Spacer(Modifier.height(8.dp))
         Text(
-            if (list.albumIds.size == 1) "1 album" else "${list.albumIds.size} albums",
+            pluralStringResource(R.plurals.album_count, list.albumIds.size, list.albumIds.size),
             color = VynlColors.TextSecondary,
             fontSize = 12.sp
         )
@@ -114,11 +117,11 @@ fun ListAlbumRow(entry: ListAlbumEntry, onClick: () -> Unit, onRemoveClick: () -
         )
         Box {
             IconButton(onClick = { showMenu = true }, modifier = Modifier.size(32.dp)) {
-                Icon(Icons.Filled.MoreVert, contentDescription = "Entry options", tint = VynlColors.TextSecondary, modifier = Modifier.size(16.dp))
+                Icon(Icons.Filled.MoreVert, contentDescription = stringResource(R.string.cd_entry_options), tint = VynlColors.TextSecondary, modifier = Modifier.size(16.dp))
             }
             DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
                 DropdownMenuItem(
-                    text = { Text("Remove from list") },
+                    text = { Text(stringResource(R.string.menu_remove_from_list)) },
                     onClick = {
                         showMenu = false
                         onRemoveClick()

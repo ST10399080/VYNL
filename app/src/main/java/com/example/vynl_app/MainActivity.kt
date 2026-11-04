@@ -1,7 +1,7 @@
 package com.example.vynl_app
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -48,7 +48,8 @@ import com.example.vynl_app.ui.tierlistbuilder.TierListBuilderViewModel
 import com.example.vynl_app.ui.tierlistviewer.TierListViewerScreen
 import com.example.vynl_app.ui.tierlistviewer.TierListViewerViewModel
 
-class MainActivity : ComponentActivity() {
+// AppCompatActivity (not ComponentActivity) so per-app language switching also works below Android 13.
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(

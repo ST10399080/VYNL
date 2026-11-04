@@ -37,6 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vynl_app.data.list.CustomList
 import com.example.vynl_app.ui.theme.VynlColors
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
+import com.example.vynl_app.R
 
 private val CardShape = RoundedCornerShape(8.dp)
 
@@ -55,10 +58,10 @@ fun ListsScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = VynlColors.TextPrimary)
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back), tint = VynlColors.TextPrimary)
             }
             Text(
-                "Lists",
+                stringResource(R.string.lists_title),
                 modifier = Modifier.weight(1f).padding(start = 8.dp),
                 color = VynlColors.TextPrimary,
                 fontSize = 24.sp
@@ -67,7 +70,7 @@ fun ListsScreen(
                 onClick = { showCreateDialog = true },
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = VynlColors.TextPrimary)
             ) {
-                Text("Create List")
+                Text(stringResource(R.string.lists_create_button))
             }
         }
 
@@ -80,7 +83,7 @@ fun ListsScreen(
         var newListName by remember { mutableStateOf("") }
         AlertDialog(
             onDismissRequest = { showCreateDialog = false },
-            title = { Text("New list name") },
+            title = { Text(stringResource(R.string.list_new_name)) },
             text = {
                 OutlinedTextField(value = newListName, onValueChange = { newListName = it }, singleLine = true)
             },
@@ -92,10 +95,10 @@ fun ListsScreen(
                             showCreateDialog = false
                         }
                     }
-                ) { Text("Create") }
+                ) { Text(stringResource(R.string.action_create)) }
             },
             dismissButton = {
-                TextButton(onClick = { showCreateDialog = false }) { Text("Cancel") }
+                TextButton(onClick = { showCreateDialog = false }) { Text(stringResource(R.string.action_cancel)) }
             }
         )
     }
@@ -117,7 +120,7 @@ private fun ListCard(list: CustomList, onClick: () -> Unit) {
             Text(list.title, color = VynlColors.TextPrimary, fontSize = 16.sp)
             Spacer(Modifier.height(2.dp))
             Text(
-                if (list.albumIds.size == 1) "1 album" else "${list.albumIds.size} albums",
+                pluralStringResource(R.plurals.album_count, list.albumIds.size, list.albumIds.size),
                 color = VynlColors.TextSecondary,
                 fontSize = 12.sp
             )

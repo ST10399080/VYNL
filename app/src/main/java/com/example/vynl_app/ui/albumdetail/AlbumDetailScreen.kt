@@ -26,6 +26,8 @@ import com.example.vynl_app.ui.list.AddToListSheet
 import com.example.vynl_app.ui.list.AddToListViewModel
 import com.example.vynl_app.ui.rating.StarRatingBar
 import com.example.vynl_app.ui.theme.VynlColors
+import androidx.compose.ui.res.stringResource
+import com.example.vynl_app.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,7 +79,7 @@ fun AlbumDetailScreen(
                 AlbumHeader(
                     album = detail,
                     // Button swaps text once the user has rated, matching the design decision from earlier
-                    rateLabel = if (userRating != null) "Your rating: $userRating stars" else "Rate album",
+                    rateLabel = if (userRating != null) stringResource(R.string.album_your_rating, userRating.toString()) else stringResource(R.string.album_rate),
                     onRateClick = { showRatingSheet = true },
                     onPlayClick = { /* playback isn't built yet */ },
                     onArtistClick = { onArtistClick(detail.artistId) },
