@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -17,6 +18,7 @@ import com.example.vynl_app.data.settings.NotificationCategory
 object NotificationHelper {
     // Intent extra carrying the album to open when the notification is tapped.
     const val EXTRA_ALBUM_ID = "extra_album_id"
+    const val ACTION_OPEN_ALBUM = "com.example.vynl_app.OPEN_ALBUM"
 
     // True when the app may currently post notifications (permission granted on Android 13+,
     // and not switched off for the app in the system settings).
@@ -40,7 +42,11 @@ object NotificationHelper {
 
         val openApp = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            albumId?.let { putExtra(EXTRA_ALBUM_ID, it) }
+            action = ACTION_OPEN_ALBUM
+            albumId?.let {
+                putExtra(EXTRA_ALBUM_ID, it)
+                data = Uri.parse("vynl://album/$it") // makes each album's PendingIntent unique
+            }
         }
         val pendingIntent = PendingIntent.getActivity(
             context,

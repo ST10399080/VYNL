@@ -1,5 +1,6 @@
 package com.example.vynl_app.ui.settings
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -66,6 +67,7 @@ fun SettingsScreen(
     val notificationsActive = settings.notificationsEnabled && osAllowed
     val testTitle = stringResource(R.string.notification_test_title)
     val testBody = stringResource(R.string.notification_test_body)
+    val testSent = stringResource(R.string.settings_test_notification_sent)
 
     Column(
         Modifier
@@ -152,6 +154,7 @@ fun SettingsScreen(
                     onClick = {
                         if (osAllowed) {
                             NotificationHelper.show(context, testTitle, testBody, NotificationCategory.RECOMMENDATIONS, albumId = "1")
+                            Toast.makeText(context, testSent, Toast.LENGTH_LONG).show()
                         } else {
                             showBlockedDialog = true
                         }

@@ -8,7 +8,11 @@ import java.util.Locale
 // values-<tag>/ resource folders. Native names are intentionally NOT translated.
 enum class AppLanguage(val tag: String, val nativeName: String) {
     ENGLISH("en", "English"),
-    ISIZULU("zu", "isiZulu")
+    ISIZULU("zu", "isiZulu"),
+    FRENCH("fr", "Français"),
+    SPANISH("es", "Español"),
+    GERMAN("de", "Deutsch"),
+    PORTUGUESE("pt", "Português")
 }
 
 object LanguageManager {

@@ -117,6 +117,7 @@
     <string name="settings_send_test_notification">Send test notification</string>
     <string name="settings_notifications_blocked_title">Notifications are blocked</string>
     <string name="settings_notifications_blocked_message">Allow notifications for VYNL in your phone\'s settings to receive recommendation, review and friend updates.</string>
+    <string name="settings_test_notification_sent">Test notification sent. Pull down the notification bar and tap it.</string>
     <string name="settings_open_settings">Open settings</string>
 
     <plurals name="tier_remaining">
