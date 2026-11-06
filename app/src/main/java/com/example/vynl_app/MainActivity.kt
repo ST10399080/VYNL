@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,14 +16,17 @@ import com.example.vynl_app.data.album.FakeSearchRepository
 import com.example.vynl_app.data.artist.FakeArtistRepository
 import com.example.vynl_app.data.artist.FakeArtistSearchRepository
 import com.example.vynl_app.data.challenge.FakeDailyChallengeRepository
+import com.example.vynl_app.data.compatibility.FakeCompatibilityRepository // adjust package
+import com.example.vynl_app.data.profile.FakeProfileRepository
 import com.example.vynl_app.data.rating.FakeRatingRepository
 import com.example.vynl_app.data.review.FakeReviewRepository
 import com.example.vynl_app.data.song.FakeSongSearchRepository
-import com.example.vynl_app.data.profile.FakeProfileRepository
 import com.example.vynl_app.ui.albumdetail.AlbumDetailScreen
 import com.example.vynl_app.ui.albumdetail.AlbumDetailViewModel
 import com.example.vynl_app.ui.artistdetail.ArtistDetailScreen
 import com.example.vynl_app.ui.artistdetail.ArtistDetailViewModel
+import com.example.vynl_app.ui.compatibility.TasteCompatibilityScreen
+import com.example.vynl_app.ui.compatibility.TasteCompatibilityViewModel
 import com.example.vynl_app.ui.dailychallenge.DailyChallengeScreen
 import com.example.vynl_app.ui.dailychallenge.DailyChallengeViewModel
 import com.example.vynl_app.ui.navigation.AlbumDetail
@@ -30,10 +34,12 @@ import com.example.vynl_app.ui.navigation.ArtistDetail
 import com.example.vynl_app.ui.navigation.DailyChallenge
 import com.example.vynl_app.ui.navigation.Profile
 import com.example.vynl_app.ui.navigation.Search
+import com.example.vynl_app.ui.navigation.TasteCompatibility // adjust package
 import com.example.vynl_app.ui.profile.ProfileScreen
 import com.example.vynl_app.ui.profile.ProfileViewModel
 import com.example.vynl_app.ui.search.SearchScreen
 import com.example.vynl_app.ui.search.SearchViewModel
+
 import com.example.vynl_app.ui.theme.VynlTheme
 
 class MainActivity : ComponentActivity() {
@@ -111,9 +117,11 @@ class MainActivity : ComponentActivity() {
                         ProfileScreen(
                             viewModel = viewModel,
                             onBack = { navController.popBackStack() },
-                            onDailyChallenge = { navController.navigate(DailyChallenge) }
+                            onDailyChallenge = { navController.navigate(DailyChallenge) },
+                            onTasteCompatibility = {
+                                navController.navigate(TasteCompatibility(targetUserId = "elena-rostova"))
+                            }
                         )
-                    }
 
                     composable<DailyChallenge> {
                         val repository = FakeDailyChallengeRepository(challengePreferences)
@@ -125,8 +133,23 @@ class MainActivity : ComponentActivity() {
                             onBack = { navController.popBackStack() }
                         )
                     }
+
+                    composable<TasteCompatibility> { backStackEntry ->
+                        val args = backStackEntry.toRoute<TasteCompatibility>()
+                        val repository = remember { FakeCompatibilityRepository() }
+                        val viewModel: TasteCompatibilityViewModel = viewModel {
+                            TasteCompatibilityViewModel(
+                                targetUserId = args.targetUserId,
+                                repository = repository
+                            )
+                        }
+                        TasteCompatibilityScreen(
+                            viewModel = viewModel,
+                            onBack = { navController.popBackStack() }
+                        )
+                    }
                 }
             }
         }
     }
-}
+}}

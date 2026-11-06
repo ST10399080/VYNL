@@ -16,3 +16,6 @@ data object Profile
 
 @Serializable
 data object DailyChallenge
+
+@Serializable
+data class TasteCompatibility(val targetUserId: String)

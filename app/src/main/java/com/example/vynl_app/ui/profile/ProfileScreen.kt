@@ -21,8 +21,9 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
@@ -30,6 +31,8 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,19 +41,19 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.vynl_app.data.profile.ThemePreference
@@ -64,7 +67,8 @@ private val ArtistOptions = listOf("Drake", "Kendrick Lamar", "SZA", "Tyler, The
 fun ProfileScreen(
     viewModel: ProfileViewModel,
     onBack: () -> Unit = {},
-    onDailyChallenge: () -> Unit = {}
+    onDailyChallenge: () -> Unit = {},
+    onTasteCompatibility: () -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
     val profile = state.profile
@@ -103,7 +107,8 @@ fun ProfileScreen(
                 profile = profile,
                 modifier = Modifier.padding(padding),
                 onEdit = viewModel::startEditing,
-                onDailyChallenge = onDailyChallenge
+                onDailyChallenge = onDailyChallenge,
+                onTasteCompatibility = onTasteCompatibility
             )
         }
     }
@@ -114,10 +119,15 @@ private fun ProfileContent(
     profile: UserProfile,
     modifier: Modifier = Modifier,
     onEdit: () -> Unit,
-    onDailyChallenge: () -> Unit
+    onDailyChallenge: () -> Unit,
+    onTasteCompatibility: () -> Unit
 ) {
     Column(
-        modifier.fillMaxSize().navigationBarsPadding().padding(20.dp),
+        modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .navigationBarsPadding()
+            .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(18.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -137,21 +147,21 @@ private fun ProfileContent(
             ProfileStat(profile.listeningStreak.toString(), "Day streak")
         }
 
-        Card(colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = VynlColors.Surface)) {
+        Card(colors = CardDefaults.cardColors(containerColor = VynlColors.Surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text("Favourite Genres", color = VynlColors.TextPrimary, fontWeight = FontWeight.Bold)
                 ChipFlow(profile.favoriteGenres.ifEmpty { listOf("Add your genres") })
             }
         }
 
-        Card(colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = VynlColors.Surface)) {
+        Card(colors = CardDefaults.cardColors(containerColor = VynlColors.Surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text("Favourite Artists", color = VynlColors.TextPrimary, fontWeight = FontWeight.Bold)
                 ChipFlow(profile.favoriteArtists.ifEmpty { listOf("Add your artists") })
             }
         }
 
-        Card(colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = VynlColors.Surface)) {
+        Card(colors = CardDefaults.cardColors(containerColor = VynlColors.Surface)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text("Theme Preference", color = VynlColors.TextPrimary, fontWeight = FontWeight.Bold)
                 Text(profile.themePreference.name.lowercase().replaceFirstChar { it.uppercase() }, color = VynlColors.TextSecondary)
@@ -160,6 +170,10 @@ private fun ProfileContent(
 
         Button(onClick = onDailyChallenge, modifier = Modifier.fillMaxWidth()) {
             Text("Play Daily Music Challenge")
+        }
+
+        OutlinedButton(onClick = onTasteCompatibility, modifier = Modifier.fillMaxWidth()) {
+            Text("Check Taste Compatibility")
         }
     }
 }
@@ -243,7 +257,7 @@ private fun EditProfileContent(
 }
 
 @Composable
-private fun ProfileAvatar(url: String?, size: androidx.compose.ui.unit.Dp) {
+private fun ProfileAvatar(url: String?, size: Dp) {
     Box(Modifier.size(size).clip(CircleShape).background(VynlColors.SurfaceVariant), contentAlignment = Alignment.Center) {
         if (!url.isNullOrBlank()) {
             AsyncImage(model = url, contentDescription = "Profile picture", modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
