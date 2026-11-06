@@ -34,18 +34,12 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -60,9 +54,6 @@ import com.example.vynl_app.data.artist.ArtistRelease
 import com.example.vynl_app.data.artist.ArtistTrack
 import com.example.vynl_app.data.artist.ReleaseFormat
 import com.example.vynl_app.ui.theme.VynlColors
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.pluralStringResource
-import com.example.vynl_app.R
 
 // Text styles from the Figma frame (default font for now; Inter/Liberation Mono are deferred).
 private object ArtistText {
@@ -84,15 +75,7 @@ private fun formatCompactCount(count: Long): String = when {
 }
 
 @Composable
-fun ArtistDetailTopBar(
-    onBack: () -> Unit,
-    onShare: () -> Unit,
-    onMoreOptions: () -> Unit,
-    onRankAlbumsClick: () -> Unit = {},
-    onRankSongsClick: () -> Unit = {}
-) {
-    var showMenu by remember { mutableStateOf(false) }
-
+fun ArtistDetailTopBar(onBack: () -> Unit, onShare: () -> Unit, onMoreOptions: () -> Unit) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -108,47 +91,23 @@ fun ArtistDetailTopBar(
             IconButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterStart).alpha(0.8f)) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = stringResource(R.string.action_back),
+                    contentDescription = "Back",
                     tint = VynlColors.TextPrimary,
                     modifier = Modifier.size(16.dp)
                 )
             }
             Text(
-                stringResource(R.string.artist_profile_title),
+                "ARTIST PROFILE",
                 modifier = Modifier.align(Alignment.Center),
                 color = VynlColors.TextSecondary,
                 style = ArtistText.Label
             )
             Row(modifier = Modifier.align(Alignment.CenterEnd), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 IconButton(onClick = onShare, modifier = Modifier.alpha(0.8f)) {
-                    Icon(Icons.Filled.Share, contentDescription = stringResource(R.string.cd_share_artist), tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
+                    Icon(Icons.Filled.Share, contentDescription = "Share artist", tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
                 }
-                Box {
-                    IconButton(
-                        onClick = {
-                            showMenu = true
-                            onMoreOptions()
-                        },
-                        modifier = Modifier.alpha(0.8f)
-                    ) {
-                        Icon(Icons.Filled.MoreVert, contentDescription = stringResource(R.string.action_more_options), tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
-                    }
-                    DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
-                        DropdownMenuItem(
-                            text = { Text(stringResource(R.string.menu_rank_albums)) },
-                            onClick = {
-                                showMenu = false
-                                onRankAlbumsClick()
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text(stringResource(R.string.menu_rank_songs)) },
-                            onClick = {
-                                showMenu = false
-                                onRankSongsClick()
-                            }
-                        )
-                    }
+                IconButton(onClick = onMoreOptions, modifier = Modifier.alpha(0.8f)) {
+                    Icon(Icons.Filled.MoreVert, contentDescription = "More options", tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
                 }
             }
         }
@@ -198,7 +157,7 @@ fun HeroSection(
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = VynlColors.Accent, modifier = Modifier.size(12.dp))
-                Text(stringResource(R.string.artist_verified), color = VynlColors.TextPrimary, style = ArtistText.Caption)
+                Text("Verified Artist", color = VynlColors.TextPrimary, style = ArtistText.Caption)
             }
         }
 
@@ -223,7 +182,7 @@ fun HeroSection(
                 ) {
                     Icon(Icons.Filled.Person, contentDescription = null, modifier = Modifier.size(14.dp))
                     Spacer(Modifier.width(6.dp))
-                    Text(stringResource(R.string.artist_follow), style = ArtistText.Body)
+                    Text("Follow", style = ArtistText.Body)
                 }
                 OutlinedButton(
                     onClick = onPlayRadioClick,
@@ -235,7 +194,7 @@ fun HeroSection(
                 ) {
                     Icon(Icons.Filled.PlayArrow, contentDescription = null, modifier = Modifier.size(16.dp))
                     Spacer(Modifier.width(6.dp))
-                    Text(stringResource(R.string.artist_play_radio), style = ArtistText.Body)
+                    Text("Play Radio", style = ArtistText.Body)
                 }
                 IconButton(
                     onClick = onStoriesClick,
@@ -243,7 +202,7 @@ fun HeroSection(
                         .size(36.dp)
                         .background(VynlColors.SurfaceVariant, CardShape)
                 ) {
-                    Icon(Icons.Filled.Face, contentDescription = stringResource(R.string.cd_artist_stories), tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
+                    Icon(Icons.Filled.Face, contentDescription = "Artist stories", tint = VynlColors.TextPrimary, modifier = Modifier.size(16.dp))
                 }
             }
         }
@@ -260,9 +219,9 @@ fun MetricsRow(artist: ArtistDetail, modifier: Modifier = Modifier) {
             .padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Metric(value = formatCompactCount(artist.monthlyListeners), label = stringResource(R.string.artist_monthly_listeners), modifier = Modifier.weight(1f))
-        Metric(value = formatCompactCount(artist.followers), label = stringResource(R.string.artist_followers), modifier = Modifier.weight(1f))
-        Metric(value = "%.1f".format(artist.vynlIndex), label = stringResource(R.string.artist_vynl_index), showAccentDot = true, modifier = Modifier.weight(1f))
+        Metric(value = formatCompactCount(artist.monthlyListeners), label = "Monthly Listeners", modifier = Modifier.weight(1f))
+        Metric(value = formatCompactCount(artist.followers), label = "Followers", modifier = Modifier.weight(1f))
+        Metric(value = "%.1f".format(artist.vynlIndex), label = "Vynl Index", showAccentDot = true, modifier = Modifier.weight(1f))
     }
 }
 
@@ -283,14 +242,14 @@ private fun Metric(value: String, label: String, modifier: Modifier = Modifier, 
 @Composable
 fun BiographySection(biography: String, onReadFullBioClick: () -> Unit, modifier: Modifier = Modifier) {
     Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text(stringResource(R.string.artist_biography), color = VynlColors.TextSecondary, style = ArtistText.Label)
+        Text("BIOGRAPHY", color = VynlColors.TextSecondary, style = ArtistText.Label)
         Text(biography, color = VynlColors.TextSecondary, style = ArtistText.Body)
         Row(
             modifier = Modifier.clickable { onReadFullBioClick() },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(stringResource(R.string.artist_read_full_bio), color = VynlColors.Accent, style = ArtistText.Body)
+            Text("Read full bio", color = VynlColors.Accent, style = ArtistText.Body)
             Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = VynlColors.Accent, modifier = Modifier.size(10.dp))
         }
     }
@@ -304,11 +263,11 @@ fun EssentialReleasesSection(
 ) {
     Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(stringResource(R.string.artist_essential_releases), color = VynlColors.TextPrimary, style = ArtistText.HeadingSmall)
-            Text(stringResource(R.string.artist_view_all, releases.size), color = VynlColors.TextSecondary, style = ArtistText.Caption)
+            Text("Essential Releases", color = VynlColors.TextPrimary, style = ArtistText.HeadingSmall)
+            Text("View All (${releases.size})", color = VynlColors.TextSecondary, style = ArtistText.Caption)
         }
         LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            items(releases) { release -> ReleaseCard(release, onClick = { onReleaseClick(release.albumId) }) }
+            items(releases) { release -> ReleaseCard(release, onClick = { onReleaseClick(release.id) }) }
         }
     }
 }
@@ -338,12 +297,12 @@ private fun ReleaseCard(release: ArtistRelease, onClick: () -> Unit) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(release.title, color = VynlColors.TextPrimary, style = ArtistText.BodyMedium)
             Text(
-                "${release.year} · ${release.format.name} · ${pluralStringResource(R.plurals.track_count, release.trackCount, release.trackCount)}",
+                "${release.year} · ${release.format.name} · ${release.trackCount} tracks",
                 color = VynlColors.TextSecondary,
                 style = ArtistText.Caption
             )
             Text(
-                stringResource(R.string.artist_release_rating, release.ratingPercentage.toString(), formatCompactCount(release.ratingCount)),
+                "${release.ratingPercentage}% Rating · ${formatCompactCount(release.ratingCount)}",
                 color = VynlColors.Accent,
                 style = ArtistText.Caption
             )
@@ -352,38 +311,26 @@ private fun ReleaseCard(release: ArtistRelease, onClick: () -> Unit) {
 }
 
 @Composable
-fun PopularTracksSection(
-    tracks: List<ArtistTrack>,
-    onTrackPlayClick: (ArtistTrack) -> Unit,
-    onTrackAlbumClick: (String) -> Unit,
-    modifier: Modifier = Modifier
-) {
+fun PopularTracksSection(tracks: List<ArtistTrack>, onTrackPlayClick: (ArtistTrack) -> Unit, modifier: Modifier = Modifier) {
     Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(stringResource(R.string.artist_popular_tracks), color = VynlColors.TextPrimary, style = ArtistText.HeadingSmall)
-            Text(stringResource(R.string.artist_last_30_days), color = VynlColors.TextSecondary, style = ArtistText.Caption)
+            Text("Popular Tracks", color = VynlColors.TextPrimary, style = ArtistText.HeadingSmall)
+            Text("Last 30 Days", color = VynlColors.TextSecondary, style = ArtistText.Caption)
         }
         Column(Modifier.fillMaxWidth().background(VynlColors.Surface, CardShape).clip(CardShape)) {
             tracks.forEachIndexed { index, track ->
                 if (index > 0) HorizontalDivider(color = VynlColors.BorderMuted)
-                PopularTrackRow(
-                    track,
-                    onPlayClick = { onTrackPlayClick(track) },
-                    // Only navigates for a track that belongs to an album; a standalone
-                    // single (albumId == null) has nowhere to go, so the row tap is a no-op.
-                    onRowClick = track.albumId?.let { albumId -> { onTrackAlbumClick(albumId) } } ?: {}
-                )
+                PopularTrackRow(track, onPlayClick = { onTrackPlayClick(track) })
             }
         }
     }
 }
 
 @Composable
-private fun PopularTrackRow(track: ArtistTrack, onPlayClick: () -> Unit, onRowClick: () -> Unit) {
+private fun PopularTrackRow(track: ArtistTrack, onPlayClick: () -> Unit) {
     Row(
         Modifier
             .fillMaxWidth()
-            .clickable(onClick = onRowClick)
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -399,7 +346,7 @@ private fun PopularTrackRow(track: ArtistTrack, onPlayClick: () -> Unit, onRowCl
                 onClick = onPlayClick,
                 modifier = Modifier.size(32.dp).background(VynlColors.SurfaceVariant, CircleShape)
             ) {
-                Icon(Icons.Filled.PlayArrow, contentDescription = stringResource(R.string.cd_play_track, track.title), tint = VynlColors.TextPrimary, modifier = Modifier.size(14.dp))
+                Icon(Icons.Filled.PlayArrow, contentDescription = "Play ${track.title}", tint = VynlColors.TextPrimary, modifier = Modifier.size(14.dp))
             }
             Column {
                 Text(track.title, color = VynlColors.TextPrimary, style = ArtistText.BodyMedium)
@@ -408,7 +355,7 @@ private fun PopularTrackRow(track: ArtistTrack, onPlayClick: () -> Unit, onRowCl
         }
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(formatCompactCount(track.playCount), color = VynlColors.TextSecondary, style = ArtistText.Caption)
-            Icon(Icons.Filled.MoreVert, contentDescription = stringResource(R.string.cd_track_actions), tint = VynlColors.TextSecondary, modifier = Modifier.size(16.dp))
+            Icon(Icons.Filled.MoreVert, contentDescription = "Track actions", tint = VynlColors.TextSecondary, modifier = Modifier.size(16.dp))
         }
     }
 }

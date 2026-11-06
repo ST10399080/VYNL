@@ -11,17 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.res.stringResource
-import com.example.vynl_app.R
 
-@Composable
 private fun descriptorFor(stars: Int): String = when (stars) {
-    0 -> stringResource(R.string.rating_not_rated)
-    1 -> stringResource(R.string.rating_poor)
-    2 -> stringResource(R.string.rating_fair)
-    3 -> stringResource(R.string.rating_good)
-    4 -> stringResource(R.string.rating_outstanding)
-    5 -> stringResource(R.string.rating_masterpiece)
+    0 -> "Not rated"
+    1 -> "Poor"
+    2 -> "Fair"
+    3 -> "Good"
+    4 -> "Outstanding"
+    5 -> "Masterpiece"
     else -> ""
 }
 
@@ -43,6 +40,6 @@ fun StarRatingBar(
                 )
             }
         }
-        Text(if (currentRating > 0) stringResource(R.string.rating_summary, currentRating, descriptorFor(currentRating)) else stringResource(R.string.rating_select))
+        Text(if (currentRating > 0) "${currentRating}.0 / 5.0  \u00B7  ${descriptorFor(currentRating)}" else "SELECT RATING")
     }
 }

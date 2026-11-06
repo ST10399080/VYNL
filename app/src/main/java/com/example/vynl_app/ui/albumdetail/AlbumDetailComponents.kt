@@ -24,13 +24,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -41,10 +38,6 @@ import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -60,9 +53,6 @@ import com.example.vynl_app.data.album.AlbumDetail
 import com.example.vynl_app.data.album.Track
 import com.example.vynl_app.data.review.Review
 import com.example.vynl_app.ui.theme.VynlColors
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.pluralStringResource
-import com.example.vynl_app.R
 
 // Text styles from the Figma frame (default font for now; Inter is deferred).
 private object AlbumText {
@@ -76,14 +66,7 @@ private object AlbumText {
 private val CardShape = RoundedCornerShape(8.dp)
 
 @Composable
-fun AlbumDetailTopBar(
-    onBack: () -> Unit,
-    onSearchClick: () -> Unit,
-    onAddToListClick: () -> Unit = {},
-    onMyListsClick: () -> Unit = {}
-) {
-    var showMenu by remember { mutableStateOf(false) }
-
+fun AlbumDetailTopBar(onBack: () -> Unit, onSearchClick: () -> Unit) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -99,7 +82,7 @@ fun AlbumDetailTopBar(
             IconButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterStart).alpha(0.8f)) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = stringResource(R.string.action_back),
+                    contentDescription = "Back",
                     tint = VynlColors.TextPrimary,
                     modifier = Modifier.size(16.dp)
                 )
@@ -110,43 +93,13 @@ fun AlbumDetailTopBar(
                 color = VynlColors.TextPrimary,
                 style = AlbumText.Heading.copy(lineHeight = 26.4.sp, letterSpacing = (-1.2).sp)
             )
-            Row(modifier = Modifier.align(Alignment.CenterEnd), verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = onSearchClick, modifier = Modifier.alpha(0.8f)) {
-                    Icon(
-                        Icons.Filled.Search,
-                        contentDescription = stringResource(R.string.action_search),
-                        tint = VynlColors.TextPrimary,
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
-                Box {
-                    IconButton(onClick = { showMenu = true }, modifier = Modifier.alpha(0.8f)) {
-                        Icon(
-                            Icons.Filled.MoreVert,
-                            contentDescription = stringResource(R.string.action_more_options),
-                            tint = VynlColors.TextPrimary,
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
-                    DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
-                        DropdownMenuItem(
-                            text = { Text(stringResource(R.string.menu_add_to_list)) },
-                            onClick = {
-                                showMenu = false
-                                onAddToListClick()
-                            }
-                        )
-                        // Temporary placement until Profile exists — per the design doc's
-                        // Figure 7 nav diagram, Lists is reached from Profile, not here.
-                        DropdownMenuItem(
-                            text = { Text(stringResource(R.string.menu_my_lists)) },
-                            onClick = {
-                                showMenu = false
-                                onMyListsClick()
-                            }
-                        )
-                    }
-                }
+            IconButton(onClick = onSearchClick, modifier = Modifier.align(Alignment.CenterEnd).alpha(0.8f)) {
+                Icon(
+                    Icons.Filled.Search,
+                    contentDescription = "Search",
+                    tint = VynlColors.TextPrimary,
+                    modifier = Modifier.size(18.dp)
+                )
             }
         }
         HorizontalDivider(color = VynlColors.BorderMuted)
@@ -204,7 +157,7 @@ fun AlbumHeader(
                 style = AlbumText.Button.copy(fontWeight = FontWeight.Normal)
             )
             Text(
-                "${album.year} · ${pluralStringResource(R.plurals.track_count, album.tracks.size, album.tracks.size)}",
+                "${album.year} · ${album.tracks.size} tracks",
                 modifier = Modifier.padding(start = 8.dp),
                 color = VynlColors.TextSecondary,
                 style = AlbumText.Caption
@@ -233,7 +186,7 @@ fun AlbumHeader(
                 border = BorderStroke(1.dp, VynlColors.TextPrimary),
                 colors = IconButtonDefaults.outlinedIconButtonColors(contentColor = VynlColors.TextPrimary)
             ) {
-                Icon(Icons.Filled.PlayArrow, contentDescription = stringResource(R.string.action_play), modifier = Modifier.size(20.dp))
+                Icon(Icons.Filled.PlayArrow, contentDescription = "Play", modifier = Modifier.size(20.dp))
             }
         }
     }
@@ -249,7 +202,7 @@ fun StatsSection(
     Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (isCommunityFavorite) {
             Text(
-                stringResource(R.string.album_community_favorite),
+                "COMMUNITY FAVORITE",
                 modifier = Modifier
                     .border(1.dp, VynlColors.TextPrimary.copy(alpha = 0.4f), RoundedCornerShape(7.dp))
                     .padding(horizontal = 13.dp, vertical = 5.dp),
@@ -265,15 +218,15 @@ fun StatsSection(
                 .border(1.dp, VynlColors.BorderMuted, CardShape)
         ) {
             Stat(
-                label = stringResource(R.string.album_community_score),
+                label = "Community Score",
                 value = "$communityPercentage%",
                 valueColor = VynlColors.TextPrimary,
                 modifier = Modifier.weight(1f)
             )
             VerticalDivider(color = VynlColors.BorderMuted)
             Stat(
-                label = stringResource(R.string.album_critic_score),
-                value = criticScore?.let { "$it%" } ?: stringResource(R.string.album_score_pending),
+                label = "Critic Score",
+                value = criticScore?.let { "$it%" } ?: "Pending",
                 valueColor = if (criticScore != null) VynlColors.TextPrimary else VynlColors.TextSecondary,
                 modifier = Modifier.weight(1f)
             )
@@ -333,17 +286,9 @@ private fun TrackRow(track: Track) {
 }
 
 @Composable
-fun ReviewsSection(reviews: List<Review>, onWriteReviewClick: () -> Unit = {}, modifier: Modifier = Modifier) {
+fun ReviewsSection(reviews: List<Review>, modifier: Modifier = Modifier) {
     Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            Text(stringResource(R.string.album_recent_reviews), color = VynlColors.TextPrimary, style = AlbumText.Heading)
-            Text(
-                stringResource(R.string.album_write_review_link),
-                color = VynlColors.Accent,
-                style = AlbumText.Body,
-                modifier = Modifier.clickable(onClick = onWriteReviewClick)
-            )
-        }
+        Text("Recent Reviews", color = VynlColors.TextPrimary, style = AlbumText.Heading)
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             reviews.forEach { ReviewCard(it) }
         }

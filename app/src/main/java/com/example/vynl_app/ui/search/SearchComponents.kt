@@ -16,15 +16,12 @@ import com.example.vynl_app.data.album.Album
 import com.example.vynl_app.data.artist.ArtistSummary
 import com.example.vynl_app.data.song.Song
 import com.example.vynl_app.ui.theme.VynlColors
-import androidx.compose.ui.res.stringResource
-import com.example.vynl_app.R
 
-@Composable
 private fun SearchTab.label(): String = when (this) {
-    SearchTab.ALBUMS -> stringResource(R.string.search_tab_albums)
-    SearchTab.SONGS -> stringResource(R.string.search_tab_songs)
-    SearchTab.ARTISTS -> stringResource(R.string.search_tab_artists)
-    SearchTab.USERS -> stringResource(R.string.search_tab_users)
+    SearchTab.ALBUMS -> "Albums"
+    SearchTab.SONGS -> "Songs"
+    SearchTab.ARTISTS -> "Artists"
+    SearchTab.USERS -> "Users"
 }
 
 @Composable
@@ -48,7 +45,7 @@ fun AlbumResultRow(album: Album, onClick: () -> Unit) {
             .clickable(onClick = onClick)
             .padding(vertical = 12.dp)
     ) {
-        Text(stringResource(R.string.search_result_row, album.title, album.artist), color = VynlColors.TextPrimary)
+        Text("${album.title} — ${album.artist}", color = VynlColors.TextPrimary)
     }
 }
 
@@ -60,7 +57,7 @@ fun SongResultRow(song: Song, onClick: () -> Unit) {
             .clickable(onClick = onClick)
             .padding(vertical = 12.dp)
     ) {
-        Text(stringResource(R.string.search_result_row, song.title, song.artist), color = VynlColors.TextPrimary)
+        Text("${song.title} — ${song.artist}", color = VynlColors.TextPrimary)
         Text(song.album, color = VynlColors.TextSecondary)
     }
 }
@@ -84,6 +81,6 @@ fun UsersComingSoonEmptyState(modifier: Modifier = Modifier) {
         modifier.fillMaxSize().padding(top = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(stringResource(R.string.search_users_coming_soon), color = VynlColors.TextSecondary)
+        Text("User search coming soon", color = VynlColors.TextSecondary)
     }
 }
